@@ -49,7 +49,7 @@ public class MainActivityFragment extends Fragment {
             llm.setOrientation(LinearLayoutManager.VERTICAL);
             recyclerView.setLayoutManager(llm);
             // Creating MusicCards inside RecyclerView
-            MusicCardsAdapter cardsAdapter = new MusicCardsAdapter(createCards(3));
+            MusicCardsAdapter cardsAdapter = new MusicCardsAdapter(createCards());
             recyclerView.setAdapter(cardsAdapter);
         } else {
             Log.v(LOG_TAG, "WARNING: There is no data, skipping adding cards");
@@ -57,15 +57,16 @@ public class MainActivityFragment extends Fragment {
         return v;
     }
 
-    private List<MusicCardsData> createCards(int size) {
+    private String[] cardsImagesArray = {"https://www.smallbusinesssaturdayuk.com/Images/Small-Business-Saturday-UK-Google-Plus.gif","https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Wiktionary_small.svg/350px-Wiktionary_small.svg.png","https://instagram.fsjc1-2.fna.fbcdn.net/t51.2885-15/e35/13712710_1812879398936071_1672603043_n.jpg","file:/storage/emulated/0/Pictures/Hangouts/image-20160515_233613.jpg"};
 
-        List<MusicCardsData> result = new ArrayList<MusicCardsData>();
-        for (int i=1; i <= size; i++) {
+    private List<MusicCardsData> createCards() {
+
+        List<MusicCardsData> result = new ArrayList<>();
+        for (int i=0; i <= cardsImagesArray.length-1; i++) {
             MusicCardsData cd = new MusicCardsData();
-            cd.cardPicture = "R.drawable.placeholder";
-
+            cd.cardPicture = cardsImagesArray[i];
             result.add(cd);
-
+            Log.v(LOG_TAG, cd.cardPicture);
         }
 
         return result;

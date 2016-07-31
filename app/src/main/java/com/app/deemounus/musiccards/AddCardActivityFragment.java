@@ -1,9 +1,12 @@
 package com.app.deemounus.musiccards;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +17,13 @@ import com.app.deemounus.musiccards.provider.musiccards.MusicCardsContentValues;
 import com.app.deemounus.musiccards.provider.musiccards.MusicCardsSelection;
 import com.gun0912.tedpicker.ImagePickerActivity;
 
+import java.util.ArrayList;
+
 public class AddCardActivityFragment extends Fragment {
 
     public AddCardActivityFragment() {
     }
+
 
     String [] projection;
 
@@ -29,6 +35,7 @@ public class AddCardActivityFragment extends Fragment {
         startActivityForResult(intent,INTENT_REQUEST_GET_IMAGES);
 
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,8 +72,22 @@ public class AddCardActivityFragment extends Fragment {
         });
 
         return v;
+
+
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+
+        if (requestCode == INTENT_REQUEST_GET_IMAGES && resultCode == Activity.RESULT_OK) {
+
+            ArrayList<Uri> image_uris = intent.getParcelableArrayListExtra(ImagePickerActivity.EXTRA_IMAGE_URIS);
+
+            //do something
+            Log.v("IMAGES RECEIVED: ", image_uris.toString());
+        }
+    }
 
 
 }

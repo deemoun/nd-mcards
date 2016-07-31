@@ -12,59 +12,71 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by deemounus on 7/17/16.
- */
 public class MusicCardsAdapter extends RecyclerView.Adapter<MusicCardsAdapter.MusicCardsViewHolder> {
-    private List<MusicCardsData> cardsData;
-    private Context context;
+    static List<MusicCardsData> cardsData;
 
-    public MusicCardsAdapter(List<MusicCardsData> cardsData){
-     this.cardsData = cardsData;
+    public MusicCardsAdapter(List<MusicCardsData> cardsData) {
+        this.cardsData = cardsData;
     }
 
     @Override
-    public int getItemCount(){
+    public int getItemCount() {
         return cardsData.size();
     }
 
     @Override
     public void onBindViewHolder(MusicCardsViewHolder contactViewHolder, int i) {
-        MusicCardsData cd = cardsData.get(i);
+        try {
+            contactViewHolder.bindView(i);
+        } catch(Exception e) {e.printStackTrace();}
+        }
 
-        context = contactViewHolder.vCardPic.getContext();
-        Picasso.with(context).load(cd.cardPicture).into(contactViewHolder.vCardPic);
-        Log.v("Adapter data: ", cd.cardPicture);
 
-    }
+        @Override
+        public MusicCardsViewHolder onCreateViewHolder (ViewGroup viewGroup,int i){
+            View itemView = LayoutInflater.
+                    from(viewGroup.getContext()).
+                    inflate(R.layout.card_view, viewGroup, false);
 
-    @Override
-    public MusicCardsViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View itemView = LayoutInflater.
-                from(viewGroup.getContext()).
-                inflate(R.layout.card_view, viewGroup, false);
+            return new MusicCardsViewHolder(itemView);
+        }
 
-        return new MusicCardsViewHolder(itemView);
-    }
 
-    public static class MusicCardsViewHolder extends RecyclerView.ViewHolder {
+        public static class MusicCardsViewHolder extends RecyclerView.ViewHolder {
 
-        protected ImageView vCardPic;
+            protected ImageView vCardPic;
+            private String imgURL;
 
-        public MusicCardsViewHolder (View v) {
-            super(v);
-//            vCardPic =  (TextView) v.findViewById(R.id.cardPic);
-            vCardPic = (ImageView) v.findViewById(R.id.cardPic);
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
-                    Log.v("Adapter", "Item is clicked: " + getAdapterPosition());
-                    Intent intent = new Intent(v.getContext(), DetailActivity.class);
-                    intent.putExtra("adapterPosition", getAdapterPosition());
-                    v.getContext().startActivity(intent);
-                }
-            });
+            public static void startDetailActivity(Context ctx, String imgURL){
+                Intent intent = new Intent(ctx, DetailActivity.class);
+                intent.putExtra("imgUrl", imgURL);
+                ctx.startActivity(intent);
+            }
+
+            public MusicCardsViewHolder(View v) {
+                super(v);
+                vCardPic = (ImageView) v.findViewById(R.id.cardPic);
+
+                v.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.v("Adapter", "Item is clicked: " + getAdapterPosition());
+                        startDetailActivity(v.getContext(), imgURL);
+                    }
+                });
+            }
+
+            public void bindView(int i){
+                Context context;
+                context = vCardPic.getContext();
+                MusicCardsData cd = cardsData.get(i);
+                imgURL = cd.cardPicture;
+                Log.v("MusicCardsAdapter", imgURL);
+                Picasso.with(context).load(imgURL).into(vCardPic);
+            }
         }
     }
-}
+

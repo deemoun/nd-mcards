@@ -1,5 +1,6 @@
 package com.app.deemounus.musiccards;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -24,6 +25,10 @@ public class DetailActivityFragment extends Fragment implements View.OnClickList
 
         View v = inflater.inflate(R.layout.fragment_detail, container, false);
 
+        Intent intent = getActivity().getIntent();
+
+        String imgUrl = intent.getStringExtra("imgUrl");
+
         Button play = (Button) v.findViewById(R.id.playSong);
         play.setOnClickListener(this);
         Button stop = (Button) v.findViewById(R.id.stopSong);
@@ -31,7 +36,7 @@ public class DetailActivityFragment extends Fragment implements View.OnClickList
         stop.setOnClickListener(this);
 
         Picasso.with(getContext())
-                .load("https://instagram.fsjc1-2.fna.fbcdn.net/t51.2885-15/e35/13712710_1812879398936071_1672603043_n.jpg")
+                .load(imgUrl)
                 .into(image);
         return v;
     }
