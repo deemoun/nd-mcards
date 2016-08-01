@@ -1,12 +1,9 @@
 package com.app.deemounus.musiccards;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -18,9 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.app.deemounus.musiccards.provider.musiccards.MusicCardsColumns;
-import com.app.deemounus.musiccards.provider.musiccards.MusicCardsContentValues;
-import com.app.deemounus.musiccards.provider.musiccards.MusicCardsSelection;
 import com.gun0912.tedpicker.ImagePickerActivity;
 import com.nononsenseapps.filepicker.FilePickerActivity;
 
@@ -39,12 +33,12 @@ public class AddCardActivityFragment extends Fragment {
     private static final int INTENT_REQUEST_GET_IMAGES = 13;
     private static final int FILE_CODE = 14;
 
-    private void getPictures() {
+    private void getPictureUrl() {
         Intent pictureIntent = new Intent(getActivity(), ImagePickerActivity.class);
         startActivityForResult(pictureIntent, INTENT_REQUEST_GET_IMAGES);
     }
 
-    private void getMusic() {
+    private void getMusicUrl() {
         Intent musicIntent = new Intent(getActivity(), FilePickerActivity.class);
         musicIntent.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, true);
         musicIntent.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, false);
@@ -61,7 +55,6 @@ public class AddCardActivityFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // TODO Add your menu entries here
         inflater.inflate(R.menu.menu_add_card, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -77,7 +70,7 @@ public class AddCardActivityFragment extends Fragment {
         addPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getPictures();
+                getPictureUrl();
             }
         });
 
@@ -95,7 +88,7 @@ public class AddCardActivityFragment extends Fragment {
 //                getContext().getContentResolver().insert(MusicCardsColumns.CONTENT_URI, values.values());
 //                getContext().getContentResolver().update(MusicCardsColumns.CONTENT_URI, values.values(), null, null);
 
-                getMusic();
+                getMusicUrl();
             }
         });
 
