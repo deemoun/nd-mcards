@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">MusicCards</string>
     <string name="action_settings">Settings</string>
+    <string name="action_save">Save</string>
     <string name="title_activity_detail">DetailActivity</string>
     <string name="title_activity_add_card">AddCardActivity</string>
 </resources>
