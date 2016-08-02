@@ -11,10 +11,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.app.deemounus.musiccards.provider.musiccards.MusicCardsColumns;
+import com.app.deemounus.musiccards.provider.musiccards.MusicCardsContentValues;
 import com.gun0912.tedpicker.ImagePickerActivity;
 import com.nononsenseapps.filepicker.FilePickerActivity;
 
@@ -47,6 +50,14 @@ public class AddCardActivityFragment extends Fragment {
         startActivityForResult(musicIntent, FILE_CODE);
     }
 
+    private void saveUrls() {
+        MusicCardsContentValues values = new MusicCardsContentValues();
+        //TODO: Add a handler if any of the values is empty
+        values.putMusic(musicUrl).putPicture(pictureUrl);
+        getContext().getContentResolver().insert(MusicCardsColumns.CONTENT_URI, values.values());
+        getContext().getContentResolver().update(MusicCardsColumns.CONTENT_URI, values.values(), null, null);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +68,23 @@ public class AddCardActivityFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_add_card, menu);
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_save) {
+         // Saving both image and music URLs and closing activity
+            saveUrls();
+            getActivity().finish();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 
@@ -82,11 +110,6 @@ public class AddCardActivityFragment extends Fragment {
 //                where.music("John");
 //                Cursor c = getContext().getContentResolver().query(MusicCardsColumns.CONTENT_URI, projection,
 //                        where.sel(), where.args(), null);
-
-//                MusicCardsContentValues values = new MusicCardsContentValues();
-//                values.putMusic("http://music_link").putPicture("http://picture_link");
-//                getContext().getContentResolver().insert(MusicCardsColumns.CONTENT_URI, values.values());
-//                getContext().getContentResolver().update(MusicCardsColumns.CONTENT_URI, values.values(), null, null);
 
                 getMusicUrl();
             }

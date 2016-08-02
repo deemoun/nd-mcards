@@ -49,10 +49,12 @@ public class MusicCardsAdapter extends RecyclerView.Adapter<MusicCardsAdapter.Mu
 
             protected ImageView vCardPic;
             private String imgURL;
+            private String musicURL;
 
-            public static void startDetailActivity(Context ctx, String imgURL){
+            public static void startDetailActivity(Context ctx, String imgUrl, String musicUrl){
                 Intent intent = new Intent(ctx, DetailActivity.class);
-                intent.putExtra("imgUrl", imgURL);
+                intent.putExtra("imgUrl", imgUrl);
+                intent.putExtra("musicUrl", musicUrl);
                 ctx.startActivity(intent);
             }
 
@@ -64,7 +66,8 @@ public class MusicCardsAdapter extends RecyclerView.Adapter<MusicCardsAdapter.Mu
                     @Override
                     public void onClick(View v) {
                         Log.v("Adapter", "Item is clicked: " + getAdapterPosition());
-                        startDetailActivity(v.getContext(), imgURL);
+                        startDetailActivity(v.getContext(), imgURL, musicURL);
+                        Log.v("Music URL for Activity", musicURL);
                     }
                 });
             }
@@ -74,7 +77,9 @@ public class MusicCardsAdapter extends RecyclerView.Adapter<MusicCardsAdapter.Mu
                 context = vCardPic.getContext();
                 MusicCardsData cd = cardsData.get(i);
                 imgURL = cd.cardPicture;
+                musicURL = cd.cardMusic;
                 Log.v("MusicCardsAdapter", imgURL);
+                Log.v("Music from Adapter", musicURL);
                 Picasso.with(context).load(imgURL).into(vCardPic);
             }
         }

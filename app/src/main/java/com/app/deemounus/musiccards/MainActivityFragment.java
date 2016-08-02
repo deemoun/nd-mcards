@@ -57,7 +57,8 @@ public class MainActivityFragment extends Fragment {
         return v;
     }
 
-    private String[] cardsImagesArray = {"https://www.smallbusinesssaturdayuk.com/Images/Small-Business-Saturday-UK-Google-Plus.gif","https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Wiktionary_small.svg/350px-Wiktionary_small.svg.png","https://instagram.fsjc1-2.fna.fbcdn.net/t51.2885-15/e35/13712710_1812879398936071_1672603043_n.jpg","file:/storage/emulated/0/Pictures/Hangouts/image-20160515_233613.jpg"};
+    private String[] cardsImagesArray = {"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Wiktionary_small.svg/350px-Wiktionary_small.svg.png","https://instagram.fsjc1-2.fna.fbcdn.net/t51.2885-15/e35/13712710_1812879398936071_1672603043_n.jpg"};
+    private String[] cardsMusicArray = {"file:///storage/emulated/0/Download/sample_song.mp3","file:///storage/emulated/0/Download/sample_song.mp3"};
 
     private List<MusicCardsData> createCards() {
 
@@ -65,8 +66,10 @@ public class MainActivityFragment extends Fragment {
         for (int i=0; i <= cardsImagesArray.length-1; i++) {
             MusicCardsData cd = new MusicCardsData();
             cd.cardPicture = cardsImagesArray[i];
+            cd.cardMusic = cardsMusicArray[i];
             result.add(cd);
             Log.v(LOG_TAG, cd.cardPicture);
+            Log.v(LOG_TAG, cd.cardMusic);
         }
 
         return result;

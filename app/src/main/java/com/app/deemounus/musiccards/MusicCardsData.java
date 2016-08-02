@@ -5,4 +5,5 @@ package com.app.deemounus.musiccards;
  */
 public class MusicCardsData {
     protected String cardPicture;
+    protected String cardMusic;
 }
