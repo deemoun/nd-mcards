@@ -52,10 +52,14 @@ public class AddCardActivityFragment extends Fragment {
 
     private void saveUrls() {
         MusicCardsContentValues values = new MusicCardsContentValues();
-        //TODO: Add a handler if any of the values is empty
-        values.putMusic(musicUrl).putPicture(pictureUrl);
-        getContext().getContentResolver().insert(MusicCardsColumns.CONTENT_URI, values.values());
-        getContext().getContentResolver().update(MusicCardsColumns.CONTENT_URI, values.values(), null, null);
+        if(musicUrl == null && pictureUrl == null){
+            Log.v("AddCardActivityFragment", "Either one of the values or both are empty!");
+        } else {
+            values.putMusic(musicUrl).putPicture(pictureUrl);
+            getContext().getContentResolver().insert(MusicCardsColumns.CONTENT_URI, values.values());
+            getContext().getContentResolver().update(MusicCardsColumns.CONTENT_URI, values.values(), null, null);
+            getActivity().finish();
+        }
     }
 
     @Override
@@ -81,7 +85,6 @@ public class AddCardActivityFragment extends Fragment {
         if (id == R.id.action_save) {
          // Saving both image and music URLs and closing activity
             saveUrls();
-            getActivity().finish();
         }
 
         return super.onOptionsItemSelected(item);
