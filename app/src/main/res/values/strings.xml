@@ -4,5 +4,5 @@
     <string name="action_save">Save</string>
     <string name="title_activity_detail">DetailActivity</string>
     <string name="title_activity_add_card">AddCardActivity</string>
-    <string name="add_card_error"></string>
+    <string name="add_card_error">Please choose both picture and music files!</string>
 </resources>

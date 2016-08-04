@@ -16,13 +16,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.app.deemounus.musiccards.provider.musiccards.MusicCardsColumns;
 import com.app.deemounus.musiccards.provider.musiccards.MusicCardsContentValues;
+import com.app.deemounus.musiccards.provider.musiccards.MusicCardsSelection;
 import com.gun0912.tedpicker.ImagePickerActivity;
 import com.nononsenseapps.filepicker.FilePickerActivity;
 
+import java.io.IOError;
 import java.util.ArrayList;
 
 public class AddCardActivityFragment extends Fragment {
@@ -41,12 +42,13 @@ public class AddCardActivityFragment extends Fragment {
     private static final int INTENT_REQUEST_GET_IMAGES = 13;
     private static final int FILE_CODE = 14;
 
-    private void getPictureUrl() {
+
+    private void getPictureUrlIntent() {
         Intent pictureIntent = new Intent(getActivity(), ImagePickerActivity.class);
         startActivityForResult(pictureIntent, INTENT_REQUEST_GET_IMAGES);
     }
 
-    private void getMusicUrl() {
+    private void getMusicUrlIntent() {
         Intent musicIntent = new Intent(getActivity(), FilePickerActivity.class);
         musicIntent.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, true);
         musicIntent.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, false);
@@ -55,15 +57,23 @@ public class AddCardActivityFragment extends Fragment {
         startActivityForResult(musicIntent, FILE_CODE);
     }
 
-    private void saveUrls() {
+    private void saveDBdata(String musicUrl, String pictureUrl){
         MusicCardsContentValues values = new MusicCardsContentValues();
+        values.putMusic(musicUrl).putPicture(pictureUrl);
+        ctx.getContentResolver().insert(MusicCardsColumns.CONTENT_URI, values.values());
+        ctx.getContentResolver().update(MusicCardsColumns.CONTENT_URI, values.values(), null, null);
+    }
+
+    private void saveUrls() {
         if(musicUrl == null || pictureUrl == null){
-            Utils.showToast(ctx, "Please choose both picture and music files!");
+            Utils.showToast(ctx, getString(R.string.add_card_error));
             Log.v(LOG_TAG, "Either one of the values or both are empty!");
         } else  {
-            values.putMusic(musicUrl).putPicture(pictureUrl);
-            ctx.getContentResolver().insert(MusicCardsColumns.CONTENT_URI, values.values());
-            ctx.getContentResolver().update(MusicCardsColumns.CONTENT_URI, values.values(), null, null);
+            try {
+                saveDBdata(musicUrl, pictureUrl);
+            } catch (IOError e){
+                e.getLocalizedMessage();
+            }
             getActivity().finish();
         }
     }
@@ -108,20 +118,26 @@ public class AddCardActivityFragment extends Fragment {
         addPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getPictureUrl();
+                getPictureUrlIntent();
             }
         });
 
         addMusic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // do something
-//                MusicCardsSelection where = new MusicCardsSelection();
-//                where.music("John");
+                MusicCardsSelection where = new MusicCardsSelection();
+                //where.music("John");
 //                Cursor c = getContext().getContentResolver().query(MusicCardsColumns.CONTENT_URI, projection,
 //                        where.sel(), where.args(), null);
+//                c.moveToFirst();
+//                for (int i = 0; i < c.getCount(); c.moveToNext()){
+//
+//                    while (c.isLast()) {
+//                        System.out.println("DB ITEMS " + c.getString(i));
+//                    }
+//                }
 
-                getMusicUrl();
+                getMusicUrlIntent();
             }
         });
 
