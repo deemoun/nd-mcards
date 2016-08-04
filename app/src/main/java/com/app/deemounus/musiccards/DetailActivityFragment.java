@@ -1,5 +1,6 @@
 package com.app.deemounus.musiccards;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -17,6 +18,9 @@ import com.squareup.picasso.Picasso;
  */
 public class DetailActivityFragment extends Fragment implements View.OnClickListener {
 
+    String LOG_TAG = getClass().getSimpleName();
+    Context ctx;
+
     public DetailActivityFragment() {
     }
 
@@ -28,7 +32,7 @@ public class DetailActivityFragment extends Fragment implements View.OnClickList
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        ctx = getContext();
         View v = inflater.inflate(R.layout.fragment_detail, container, false);
         Intent intent = getIntentValue();
         String imgUrl = intent.getStringExtra("imgUrl");
@@ -38,7 +42,7 @@ public class DetailActivityFragment extends Fragment implements View.OnClickList
         ImageView image = (ImageView) v.findViewById(R.id.imageView);
         stop.setOnClickListener(this);
 
-        Picasso.with(getContext())
+        Picasso.with(ctx)
                 .load(imgUrl)
                 .into(image);
         return v;
@@ -49,7 +53,7 @@ public class DetailActivityFragment extends Fragment implements View.OnClickList
         Intent intent = getIntentValue();
         String musicUrl = intent.getStringExtra("musicUrl");
         Log.v("Media URL is: ", musicUrl);
-        MediaPlayback mp = new MediaPlayback(getContext(), musicUrl);
+        MediaPlayback mp = new MediaPlayback(ctx, musicUrl);
         switch (v.getId()) {
             case R.id.playSong:
                 mp.playMedia();

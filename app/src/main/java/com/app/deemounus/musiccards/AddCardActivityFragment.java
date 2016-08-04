@@ -2,6 +2,7 @@ package com.app.deemounus.musiccards;
 
 import android.app.Activity;
 import android.content.ClipData;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
@@ -15,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.app.deemounus.musiccards.provider.musiccards.MusicCardsColumns;
 import com.app.deemounus.musiccards.provider.musiccards.MusicCardsContentValues;
@@ -25,11 +27,14 @@ import java.util.ArrayList;
 
 public class AddCardActivityFragment extends Fragment {
 
+    String LOG_TAG = getClass().getSimpleName();
+    Context ctx;
+
     public AddCardActivityFragment() {
     }
 
 
-    String[] projection;
+    String[] projection = null;
     String musicUrl;
     String pictureUrl;
 
@@ -52,12 +57,13 @@ public class AddCardActivityFragment extends Fragment {
 
     private void saveUrls() {
         MusicCardsContentValues values = new MusicCardsContentValues();
-        if(musicUrl == null && pictureUrl == null){
-            Log.v("AddCardActivityFragment", "Either one of the values or both are empty!");
-        } else {
+        if(musicUrl == null || pictureUrl == null){
+            Utils.showToast(ctx, "Please choose both picture and music files!");
+            Log.v(LOG_TAG, "Either one of the values or both are empty!");
+        } else  {
             values.putMusic(musicUrl).putPicture(pictureUrl);
-            getContext().getContentResolver().insert(MusicCardsColumns.CONTENT_URI, values.values());
-            getContext().getContentResolver().update(MusicCardsColumns.CONTENT_URI, values.values(), null, null);
+            ctx.getContentResolver().insert(MusicCardsColumns.CONTENT_URI, values.values());
+            ctx.getContentResolver().update(MusicCardsColumns.CONTENT_URI, values.values(), null, null);
             getActivity().finish();
         }
     }
@@ -66,6 +72,7 @@ public class AddCardActivityFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        ctx = getContext();
     }
 
     @Override
@@ -145,7 +152,7 @@ public class AddCardActivityFragment extends Fragment {
                             Log.v("Music URL: ", uri.toString());
                             musicUrl = uri.toString();
                         } else {
-                            Log.v("AddActivityFragment", "Url is null");
+                            Log.v(LOG_TAG, "Url is null");
                         }
                 }
             }

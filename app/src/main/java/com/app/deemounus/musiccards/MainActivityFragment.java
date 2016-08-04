@@ -1,5 +1,6 @@
 package com.app.deemounus.musiccards;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +19,7 @@ import java.util.List;
 public class MainActivityFragment extends Fragment {
 
     String LOG_TAG = getClass().getSimpleName();
+    Context ctx;
 
     public MainActivityFragment() {
     }
@@ -25,13 +27,16 @@ public class MainActivityFragment extends Fragment {
     boolean activityHasData;
 
     private View populateFragmentData(LayoutInflater inflater, ViewGroup container){
+        //TODO: Add loader that checks if there is data
         activityHasData = true;
 
         // Showing the layout depending if user has data for cards or not
 
         if(activityHasData){
+            Log.v(LOG_TAG,"Activity has cards data");
             return inflater.inflate(R.layout.fragment_main_data, container, false);
         } else {
+            Log.v(LOG_TAG,"Activity has no cards data");
             return inflater.inflate(R.layout.fragment_main, container, false);
         }
     }
@@ -39,13 +44,14 @@ public class MainActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ctx = getContext();
         View v = populateFragmentData(inflater, container);
         super.onCreate(savedInstanceState);
 //         If there is a data, create cards
         if(v.findViewById(R.id.cardList).isEnabled() && activityHasData) {
             RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.cardList);
             recyclerView.setHasFixedSize(true);
-            LinearLayoutManager llm = new LinearLayoutManager(getContext());
+            LinearLayoutManager llm = new LinearLayoutManager(ctx);
             llm.setOrientation(LinearLayoutManager.VERTICAL);
             recyclerView.setLayoutManager(llm);
             // Creating MusicCards inside RecyclerView
