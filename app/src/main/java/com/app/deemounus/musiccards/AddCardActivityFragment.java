@@ -4,10 +4,14 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,7 +30,7 @@ import com.nononsenseapps.filepicker.FilePickerActivity;
 import java.io.IOError;
 import java.util.ArrayList;
 
-public class AddCardActivityFragment extends Fragment {
+public class AddCardActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     String LOG_TAG = getClass().getSimpleName();
     Context ctx;
@@ -38,6 +42,7 @@ public class AddCardActivityFragment extends Fragment {
     String[] projection = null;
     String musicUrl;
     String pictureUrl;
+    boolean DBhasdata;
 
     private static final int INTENT_REQUEST_GET_IMAGES = 13;
     private static final int FILE_CODE = 14;
@@ -60,8 +65,13 @@ public class AddCardActivityFragment extends Fragment {
     private void saveDBdata(String musicUrl, String pictureUrl){
         MusicCardsContentValues values = new MusicCardsContentValues();
         values.putMusic(musicUrl).putPicture(pictureUrl);
-        ctx.getContentResolver().insert(MusicCardsColumns.CONTENT_URI, values.values());
-        ctx.getContentResolver().update(MusicCardsColumns.CONTENT_URI, values.values(), null, null);
+        if(DBhasdata) {
+            Log.v(LOG_TAG, "Database has DATA, NOT NULL");
+            ctx.getContentResolver().update(MusicCardsColumns.CONTENT_URI, values.values(), null, null);
+        } else {
+            Log.v(LOG_TAG, "Database has NO DATA, it is NULL");
+            ctx.getContentResolver().insert(MusicCardsColumns.CONTENT_URI, values.values());
+        }
     }
 
     private void saveUrls() {
@@ -174,4 +184,26 @@ public class AddCardActivityFragment extends Fragment {
             }
     }
 
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Uri CONTENT_URI = MusicCardsColumns.CONTENT_URI;
+        return new CursorLoader(getContext(), CONTENT_URI, null, null, null, null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        if(cursor.getCount() == 0){
+            DBhasdata = false;
+            Log.v(LOG_TAG, "Setting database value to FALSE");
+        } else if (cursor.getCount() > 0) {
+            DBhasdata = true;
+            Log.v(LOG_TAG, "Setting database value to TRUE");
+        }
+        cursor.close();
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
+    }
 }

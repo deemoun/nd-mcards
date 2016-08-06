@@ -1,8 +1,14 @@
 package com.app.deemounus.musiccards;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,16 +16,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.app.deemounus.musiccards.provider.musiccards.MusicCardsColumns;
+import com.app.deemounus.musiccards.provider.musiccards.MusicCardsSelection;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment {
+public class MainActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     String LOG_TAG = getClass().getSimpleName();
     Context ctx;
+    private List<Pair<String, String>> cardsList = new ArrayList<>();
 
     public MainActivityFragment() {
     }
@@ -45,6 +55,8 @@ public class MainActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ctx = getContext();
+        // Initiating the loader
+        getLoaderManager().initLoader(1, null, this);
         View v = populateFragmentData(inflater, container);
         super.onCreate(savedInstanceState);
 //         If there is a data, create cards
@@ -79,5 +91,34 @@ public class MainActivityFragment extends Fragment {
         }
 
         return result;
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Uri CONTENT_URI = MusicCardsColumns.CONTENT_URI;
+        MusicCardsSelection where = new MusicCardsSelection();
+        where.orderById();
+        return new CursorLoader(getContext(), CONTENT_URI, null, where.sel(), where.args(), null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        cursor.moveToFirst();
+        if(cursor.moveToFirst()){
+            do{
+                System.out.println("CURSOR VALUE " + cursor.getString(cursor.getColumnIndex("picture")));
+                System.out.println("CURSOR VALUE " + cursor.getString(cursor.getColumnIndex("music")));
+            } while (cursor.moveToNext());
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
     }
 }

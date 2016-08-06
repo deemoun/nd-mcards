@@ -16,7 +16,7 @@ import com.squareup.picasso.Picasso;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class DetailActivityFragment extends Fragment implements View.OnClickListener {
+public class DetailActivityFragment extends Fragment implements View.OnClickListener  {
 
     String LOG_TAG = getClass().getSimpleName();
     Context ctx;
