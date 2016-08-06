@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="App was developed by Dmitry Yarygin"
+        android:text="@string/about_app"
         android:id="@+id/textView2"
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"

@@ -51,9 +51,7 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        } else  if (id == R.id.action_about){
+        if (id == R.id.action_about){
             Intent i = new Intent(getBaseContext(), AboutApp.class);
             startActivity(i);
         } else if (id == R.id.action_add_card){
