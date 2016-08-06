@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.util.Pair;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -22,19 +21,18 @@ import com.app.deemounus.musiccards.provider.musiccards.MusicCardsSelection;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A placeholder fragment containing a simple view.
- */
 public class MainActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
-
-    String LOG_TAG = getClass().getSimpleName();
-    Context ctx;
-    private List<Pair<String, String>> cardsList = new ArrayList<>();
 
     public MainActivityFragment() {
     }
 
     boolean activityHasData;
+    private List<String> pictureUrlList = new ArrayList<String>();
+    private List<String> musicUrlList = new ArrayList<String>();
+    private String[] cardsImgArray;
+    private String[] cardsMusArray;
+    String LOG_TAG = getClass().getSimpleName();
+    Context ctx;
 
     private View populateFragmentData(LayoutInflater inflater, ViewGroup container){
         //TODO: Add loader that checks if there is data
@@ -54,24 +52,11 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ctx = getContext();
         // Initiating the loader
         getLoaderManager().initLoader(1, null, this);
+        ctx = getContext();
         View v = populateFragmentData(inflater, container);
         super.onCreate(savedInstanceState);
-//         If there is a data, create cards
-        if(v.findViewById(R.id.cardList).isEnabled() && activityHasData) {
-            RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.cardList);
-            recyclerView.setHasFixedSize(true);
-            LinearLayoutManager llm = new LinearLayoutManager(ctx);
-            llm.setOrientation(LinearLayoutManager.VERTICAL);
-            recyclerView.setLayoutManager(llm);
-            // Creating MusicCards inside RecyclerView
-            MusicCardsAdapter cardsAdapter = new MusicCardsAdapter(createCards());
-            recyclerView.setAdapter(cardsAdapter);
-        } else {
-            Log.v(LOG_TAG, "WARNING: There is no data, skipping adding cards");
-        }
         return v;
     }
 
@@ -81,15 +66,14 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     private List<MusicCardsData> createCards() {
 
         List<MusicCardsData> result = new ArrayList<>();
-        for (int i=0; i <= cardsImagesArray.length-1; i++) {
+        for (int i=0; i <= cardsImgArray.length-1; i++) {
             MusicCardsData cd = new MusicCardsData();
-            cd.cardPicture = cardsImagesArray[i];
-            cd.cardMusic = cardsMusicArray[i];
+            cd.cardPicture = cardsImgArray[i];
+            cd.cardMusic = cardsMusArray[i];
             result.add(cd);
             Log.v(LOG_TAG, cd.cardPicture);
             Log.v(LOG_TAG, cd.cardMusic);
         }
-
         return result;
     }
 
@@ -104,17 +88,32 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         cursor.moveToFirst();
-        if(cursor.moveToFirst()){
-            do{
-                System.out.println("CURSOR VALUE " + cursor.getString(cursor.getColumnIndex("picture")));
-                System.out.println("CURSOR VALUE " + cursor.getString(cursor.getColumnIndex("music")));
-            } while (cursor.moveToNext());
+        try {
+            while (!cursor.isAfterLast()) {
+                pictureUrlList.add("file://" + cursor.getString(cursor.getColumnIndex(MusicCardsColumns.PICTURE)).replace("[", "").replace("]", ""));
+                musicUrlList.add(cursor.getString(cursor.getColumnIndex(MusicCardsColumns.MUSIC)).replace("[", "").replace("]", ""));
+                cursor.moveToNext();
+            }
+        } finally {
+            cardsImgArray = pictureUrlList.toArray(new String [pictureUrlList.size()]);
+            cardsMusArray = musicUrlList.toArray(new String[musicUrlList.size()]);
+            cursor.close();
+            //         If there is a data, create cards
+            if(getView().findViewById(R.id.cardList).isEnabled() && activityHasData) {
+                RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.cardList);
+                recyclerView.setHasFixedSize(true);
+                LinearLayoutManager llm = new LinearLayoutManager(ctx);
+                llm.setOrientation(LinearLayoutManager.VERTICAL);
+                recyclerView.setLayoutManager(llm);
+                // Creating MusicCards inside RecyclerView
+                MusicCardsAdapter cardsAdapter = new MusicCardsAdapter(createCards());
+                recyclerView.setAdapter(cardsAdapter);
+            }
         }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-
     }
 
     @Override

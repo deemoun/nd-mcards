@@ -36,6 +36,7 @@ public class DetailActivityFragment extends Fragment implements View.OnClickList
         View v = inflater.inflate(R.layout.fragment_detail, container, false);
         Intent intent = getIntentValue();
         String imgUrl = intent.getStringExtra("imgUrl");
+        Log.v("Image URL is: ", imgUrl);
         Button play = (Button) v.findViewById(R.id.playSong);
         play.setOnClickListener(this);
         Button stop = (Button) v.findViewById(R.id.stopSong);
