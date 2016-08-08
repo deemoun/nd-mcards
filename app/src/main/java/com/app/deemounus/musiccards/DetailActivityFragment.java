@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
@@ -40,9 +41,9 @@ public class DetailActivityFragment extends Fragment implements View.OnClickList
         Intent intent = getIntentValue();
         String imgUrl = intent.getStringExtra("imgUrl");
         Log.v("Image URL is: ", imgUrl);
-        Button play = (Button) v.findViewById(R.id.playSong);
+        ImageButton play = (ImageButton) v.findViewById(R.id.playSong);
         play.setOnClickListener(this);
-        Button stop = (Button) v.findViewById(R.id.stopSong);
+        ImageButton stop = (ImageButton) v.findViewById(R.id.stopSong);
         ImageView image = (ImageView) v.findViewById(R.id.imageView);
         stop.setOnClickListener(this);
 

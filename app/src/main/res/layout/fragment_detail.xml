@@ -10,22 +10,25 @@
     tools:showIn="@layout/activity_detail">
 
 
-    <Button
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Play Song"
+        android:src="@drawable/ic_play_circle_filled_black_48dp"
         android:id="@+id/playSong"
+        android:layout_marginBottom="74dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="78dp" />
+        android:layout_marginStart="87dp" />
 
-    <Button
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="STOP SONG"
+        android:src="@drawable/ic_stop_black_48dp"
         android:id="@+id/stopSong"
-        android:layout_alignTop="@+id/playSong"
-        android:layout_alignParentEnd="true" />
+        android:layout_below="@+id/imageView"
+        android:layout_toEndOf="@+id/playSong" />
 
     <ImageView
         android:layout_width="400dp"
