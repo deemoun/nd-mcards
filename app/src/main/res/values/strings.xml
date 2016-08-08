@@ -6,6 +6,10 @@
     <string name="action_save">Save</string>
     <string name="title_activity_detail">Music Cards</string>
     <string name="title_activity_add_card">Add a card</string>
+    <string name="play_song">Play song</string>
+    <string name="stop_song">Stop song</string>
+    <string name="add_picture">Add picture</string>
+    <string name="add_music">Add music</string>
     <string name="about_app">App was developed by Dmitry Yarygin"</string>
     <string name="add_card_error">Please choose both picture and music files!</string>
 </resources>

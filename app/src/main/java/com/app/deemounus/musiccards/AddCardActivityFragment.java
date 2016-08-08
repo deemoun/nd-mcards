@@ -136,16 +136,6 @@ public class AddCardActivityFragment extends Fragment implements LoaderManager.L
             @Override
             public void onClick(View v) {
                 MusicCardsSelection where = new MusicCardsSelection();
-                //where.music("John");
-//                Cursor c = getContext().getContentResolver().query(MusicCardsColumns.CONTENT_URI, projection,
-//                        where.sel(), where.args(), null);
-//                c.moveToFirst();
-//                for (int i = 0; i < c.getCount(); c.moveToNext()){
-//
-//                    while (c.isLast()) {
-//                        System.out.println("DB ITEMS " + c.getString(i));
-//                    }
-//                }
 
                 getMusicUrlIntent();
             }

@@ -13,7 +13,7 @@
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Play Song"
+        android:contentDescription="@string/play_song"
         android:src="@drawable/ic_play_circle_filled_black_48dp"
         android:id="@+id/playSong"
         android:layout_marginBottom="74dp"
@@ -24,7 +24,7 @@
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="STOP SONG"
+        android:contentDescription="@string/stop_song"
         android:src="@drawable/ic_stop_black_48dp"
         android:id="@+id/stopSong"
         android:layout_below="@+id/imageView"

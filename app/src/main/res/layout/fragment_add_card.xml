@@ -12,7 +12,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add picture"
+        android:contentDescription="@string/add_picture"
         android:id="@+id/addPicture"
         android:onClick="addPicture"
         android:layout_marginTop="67dp"
@@ -22,7 +22,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add music"
+        android:contentDescription="@string/add_music"
         android:id="@+id/addMusic"
         android:onClick="addMusic"
         android:layout_marginTop="32dp"
