@@ -20,11 +20,12 @@ import com.squareup.picasso.Picasso;
  */
 public class DetailActivityFragment extends Fragment implements View.OnClickListener  {
 
-    String LOG_TAG = getClass().getSimpleName();
-    Context ctx;
-
     public DetailActivityFragment() {
     }
+
+    String LOG_TAG = getClass().getSimpleName();
+    Context ctx;
+    private MediaPlayback mp;
 
     public Intent getIntentValue(){
         return getActivity().getIntent();
@@ -47,6 +48,8 @@ public class DetailActivityFragment extends Fragment implements View.OnClickList
 
         Picasso.with(ctx)
                 .load(imgUrl)
+                .fit()
+                .centerCrop()
                 .into(image);
         return v;
     }
@@ -56,13 +59,23 @@ public class DetailActivityFragment extends Fragment implements View.OnClickList
         Intent intent = getIntentValue();
         String musicUrl = intent.getStringExtra("musicUrl");
         Log.v("Media URL is: ", musicUrl);
-        MediaPlayback mp = new MediaPlayback(ctx, musicUrl);
+        mp = new MediaPlayback(ctx, musicUrl);
         switch (v.getId()) {
             case R.id.playSong:
                 mp.playMedia();
                 break;
             case R.id.stopSong:
                     mp.stopMedia();
+                break;
+        }
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        if(mp != null){
+            mp.stopMedia();
+            mp = null;
         }
     }
 }

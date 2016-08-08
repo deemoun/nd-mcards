@@ -32,6 +32,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     private String[] cardsImgArray;
     private String[] cardsMusArray;
     String LOG_TAG = getClass().getSimpleName();
+    String FILE_APPEND = "file://";
     Context ctx;
 
     private View populateFragmentData(LayoutInflater inflater, ViewGroup container){
@@ -97,20 +98,24 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        cursor.moveToFirst();
-        try {
-            while (!cursor.isAfterLast()) {
-                pictureUrlList.add("file://" + cursor.getString(cursor.getColumnIndex(MusicCardsColumns.PICTURE)).replace("[", "").replace("]", ""));
-                musicUrlList.add(cursor.getString(cursor.getColumnIndex(MusicCardsColumns.MUSIC)).replace("[", "").replace("]", ""));
-                cursor.moveToNext();
+        if(!cursor.isClosed()) {
+            cursor.moveToFirst();
+            try {
+                while (!cursor.isAfterLast()) {
+                    pictureUrlList.add(FILE_APPEND + cursor.getString(cursor.getColumnIndex(MusicCardsColumns.PICTURE)).replace("[", "").replace("]", ""));
+                    musicUrlList.add(cursor.getString(cursor.getColumnIndex(MusicCardsColumns.MUSIC)).replace("[", "").replace("]", ""));
+                    cursor.moveToNext();
+                }
+            } finally {
+                cardsImgArray = pictureUrlList.toArray(new String[pictureUrlList.size()]);
+                cardsMusArray = musicUrlList.toArray(new String[musicUrlList.size()]);
+                //  If there is a data, create cards
+                startLoadingCards();
             }
-        } finally {
-            cardsImgArray = pictureUrlList.toArray(new String [pictureUrlList.size()]);
-            cardsMusArray = musicUrlList.toArray(new String[musicUrlList.size()]);
-            cursor.close();
-            //         If there is a data, create cards
-            startLoadingCards();
+        } else {
+            Log.v(LOG_TAG, "Cursor is closed");
         }
+
     }
 
     @Override
