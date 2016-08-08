@@ -9,7 +9,6 @@
     tools:context="com.app.deemounus.musiccards.AddCardActivityFragment"
     tools:showIn="@layout/activity_add_card">
 
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

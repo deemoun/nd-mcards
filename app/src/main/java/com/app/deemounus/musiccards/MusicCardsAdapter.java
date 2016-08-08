@@ -78,10 +78,12 @@ public class MusicCardsAdapter extends RecyclerView.Adapter<MusicCardsAdapter.Mu
                 MusicCardsData cd = cardsData.get(i);
                 imgURL = cd.cardPicture;
                 musicURL = cd.cardMusic;
-                Log.v("MusicCardsAdapter", imgURL);
+                Log.v("Image from Adapter", imgURL);
                 Log.v("Music from Adapter", musicURL);
                 Picasso.with(context)
                         .load(imgURL)
+                        .resize(400,400)
+                        .centerCrop()
                         .into(vCardPic);
             }
         }

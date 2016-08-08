@@ -3,6 +3,7 @@ package com.app.deemounus.musiccards;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 
 public class DetailActivity extends AppCompatActivity {
