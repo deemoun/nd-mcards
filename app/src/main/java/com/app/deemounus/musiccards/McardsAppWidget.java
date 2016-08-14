@@ -18,7 +18,7 @@ public class McardsAppWidget extends AppWidgetProvider {
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.mcards_app_widget);
         views.setTextViewText(R.id.appwidget_text, widgetText);
-//        context.startService(new Intent(context, DataIntentService.class));
+        context.startService(new Intent(context, DataIntentService.class));
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
@@ -40,6 +40,7 @@ public class McardsAppWidget extends AppWidgetProvider {
     @Override
     public void onDisabled(Context context) {
         // Enter relevant functionality for when the last widget is disabled
+        context.stopService(new Intent(context, DataIntentService.class));
     }
 }
 

@@ -3,89 +3,77 @@ package com.app.deemounus.musiccards;
 import android.app.IntentService;
 import android.content.Intent;
 import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.util.Log;
 
-/**
- * An {@link IntentService} subclass for handling asynchronous task requests in
- * a service on a separate handler thread.
- * <p/>
- * TODO: Customize class - update intent actions, extra parameters and static
- * helper methods.
- */
+import com.app.deemounus.musiccards.provider.musiccards.MusicCardsColumns;
+import com.app.deemounus.musiccards.provider.musiccards.MusicCardsSelection;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class DataIntentService extends IntentService {
-    // TODO: Rename actions, choose action names that describe tasks that this
-    // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
-    private static final String ACTION_FOO = "com.app.deemounus.musiccards.action.FOO";
-    private static final String ACTION_BAZ = "com.app.deemounus.musiccards.action.BAZ";
 
-    // TODO: Rename parameters
-    private static final String EXTRA_PARAM1 = "com.app.deemounus.musiccards.extra.PARAM1";
-    private static final String EXTRA_PARAM2 = "com.app.deemounus.musiccards.extra.PARAM2";
+    List<String> pictureUrlList = new ArrayList<>();
+    List<String> musicUrlList = new ArrayList<>();
+    String FILE_APPEND = "file://";
+    String[] cardsImgArray;
+    String[] cardsMusArray;
+    CursorLoader mCursorLoader;
+    String LOG_TAG = getClass().getSimpleName();
 
     public DataIntentService() {
         super("DataIntentService");
     }
 
-    /**
-     * Starts this service to perform action Foo with the given parameters. If
-     * the service is already performing a task this action will be queued.
-     *
-     * @see IntentService
-     */
-    // TODO: Customize helper method
-    public static void startActionFoo(Context context, String param1, String param2) {
-        Intent intent = new Intent(context, DataIntentService.class);
-        intent.setAction(ACTION_FOO);
-        intent.putExtra(EXTRA_PARAM1, param1);
-        intent.putExtra(EXTRA_PARAM2, param2);
-        context.startService(intent);
-    }
+    @Override
+    public void onCreate(){
+        super.onCreate();
+        Log.v(LOG_TAG, "onCreate is executed from widget!");
+        Uri CONTENT_URI = MusicCardsColumns.CONTENT_URI;
+        MusicCardsSelection where = new MusicCardsSelection();
+        where.orderById();
+        mCursorLoader = new CursorLoader(getApplicationContext(), CONTENT_URI, null, where.sel(), where.args(), null);
+        mCursorLoader.registerListener(2, new Loader.OnLoadCompleteListener<Cursor>() {
 
-    /**
-     * Starts this service to perform action Baz with the given parameters. If
-     * the service is already performing a task this action will be queued.
-     *
-     * @see IntentService
-     */
-    // TODO: Customize helper method
-    public static void startActionBaz(Context context, String param1, String param2) {
-        Intent intent = new Intent(context, DataIntentService.class);
-        intent.setAction(ACTION_BAZ);
-        intent.putExtra(EXTRA_PARAM1, param1);
-        intent.putExtra(EXTRA_PARAM2, param2);
-        context.startService(intent);
+                    @Override
+                    public void onLoadComplete(Loader<Cursor> loader, Cursor cursor) {
+                        if(!cursor.isClosed()) {
+                            cursor.moveToFirst();
+                            try {
+                                while (!cursor.isAfterLast()) {
+                                    pictureUrlList.add(FILE_APPEND + cursor.getString(cursor.getColumnIndex(MusicCardsColumns.PICTURE)).replace("[", "").replace("]", ""));
+                                    musicUrlList.add(cursor.getString(cursor.getColumnIndex(MusicCardsColumns.MUSIC)).replace("[", "").replace("]", ""));
+                                    cursor.moveToNext();
+                                }
+                            } finally {
+                                cardsImgArray = pictureUrlList.toArray(new String[pictureUrlList.size()]);
+                                cardsMusArray = musicUrlList.toArray(new String[musicUrlList.size()]);
+                            }
+                        } else {
+                            Log.v(LOG_TAG, "Cursor is closed");
+                        }
+                    }
+                });
+        mCursorLoader.startLoading();
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        if (intent != null) {
-            final String action = intent.getAction();
-            if (ACTION_FOO.equals(action)) {
-                final String param1 = intent.getStringExtra(EXTRA_PARAM1);
-                final String param2 = intent.getStringExtra(EXTRA_PARAM2);
-                handleActionFoo(param1, param2);
-            } else if (ACTION_BAZ.equals(action)) {
-                final String param1 = intent.getStringExtra(EXTRA_PARAM1);
-                final String param2 = intent.getStringExtra(EXTRA_PARAM2);
-                handleActionBaz(param1, param2);
-            }
+
+    }
+
+    @Override
+    public void onDestroy() {
+        // Stop the cursor loader
+        if (mCursorLoader != null) {
+//            mCursorLoader.unregisterListener(this);
+            mCursorLoader.reset();
+            mCursorLoader.cancelLoad();
+            mCursorLoader.stopLoading();
         }
-    }
-
-    /**
-     * Handle action Foo in the provided background thread with the provided
-     * parameters.
-     */
-    private void handleActionFoo(String param1, String param2) {
-        // TODO: Handle action Foo
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-
-    /**
-     * Handle action Baz in the provided background thread with the provided
-     * parameters.
-     */
-    private void handleActionBaz(String param1, String param2) {
-        // TODO: Handle action Baz
-        throw new UnsupportedOperationException("Not yet implemented");
     }
 }

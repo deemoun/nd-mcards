@@ -14,6 +14,16 @@ public class MainActivity extends AppCompatActivity {
 
     String LOG_TAG = getClass().getSimpleName();
 
+    public boolean ismTwoPane() {
+        if (findViewById(R.id.fragmentDetail) != null) {
+            Log.v(LOG_TAG, "Layout is two pane (tablet)");
+            return true;
+        } else {
+            Log.v(LOG_TAG, "Layout is single pain (phone)");
+            return false;
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,6 +31,13 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        if (findViewById(R.id.fragmentDetail) != null) {
+            if (ismTwoPane()) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragmentDetail, new EmptyDetailViewFragment(), "TAG")
+                        .commit();
+            }
+        }
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         if (fab != null) {
             fab.setOnClickListener(new View.OnClickListener() {
