@@ -2,6 +2,7 @@ package com.app.deemounus.musiccards;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -9,9 +10,17 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
+
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 
 public class MainActivity extends AppCompatActivity {
 
+    private InterstitialAd interstitial;
     String LOG_TAG = getClass().getSimpleName();
 
     public boolean ismTwoPane() {
@@ -30,6 +39,44 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        // Prepare the Interstitial Ad
+        interstitial = new InterstitialAd(MainActivity.this);
+        // Insert the Ad Unit ID
+        interstitial.setAdUnitId(getString(R.string.interstitial_ad_unit_id));
+
+        //Locate the Banner Ad in activity_main.xml
+        AdView adView = (AdView) this.findViewById(R.id.adView);
+
+        // Request for Ads
+        AdRequest adRequest = new AdRequest.Builder()
+
+                // Add a test device to show Test Ads
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .addTestDevice(getString(R.string.ads_test_id))
+                .build();
+
+        // Load ads into Banner Ads
+        adView.loadAd(adRequest);
+
+        // Load ads into Interstitial Ads
+        interstitial.loadAd(adRequest);
+
+        // Prepare an Interstitial Ad Listener
+        interstitial.setAdListener(new AdListener() {
+            public void onAdLoaded() {
+                // To show the full Ad window on start
+//                displayInterstitial();
+            }
+        });
+    }
+
+    public void displayInterstitial() {
+        // If Ads are loaded, show Interstitial else show nothing.
+        if (interstitial.isLoaded()) {
+            interstitial.show();
+        }
+
 
         if (findViewById(R.id.fragmentDetail) != null) {
             if (ismTwoPane()) {
