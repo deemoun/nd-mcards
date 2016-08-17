@@ -50,6 +50,15 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         }
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Obtain the shared Tracker instance.
+//        AnalyticsTracker application = (AnalyticsTracker) getApplication();
+//        mTracker = application.getDefaultTracker();
+    }
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
