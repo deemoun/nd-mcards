@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 
 import com.app.deemounus.musiccards.provider.musiccards.MusicCardsColumns;
 import com.app.deemounus.musiccards.provider.musiccards.MusicCardsSelection;
+import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
 import java.util.ArrayList;
@@ -32,7 +33,6 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     private List<String> musicUrlList = new ArrayList<String>();
     private String[] cardsImgArray;
     private String[] cardsMusArray;
-    private Tracker mTracker;
     String LOG_TAG = getClass().getSimpleName();
     String FILE_APPEND = "file://";
     Context ctx;
@@ -55,10 +55,6 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Obtain the shared Tracker instance.
-        AnalyticsTracker application = (AnalyticsTracker) getActivity().getApplication();
-        mTracker = application.getDefaultTracker();
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

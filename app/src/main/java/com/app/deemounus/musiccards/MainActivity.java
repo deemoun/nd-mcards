@@ -17,11 +17,14 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 public class MainActivity extends AppCompatActivity {
 
     private InterstitialAd interstitial;
     String LOG_TAG = getClass().getSimpleName();
+    private Tracker mTracker;
 
     public boolean ismTwoPane() {
         if (findViewById(R.id.fragmentDetail) != null) {
@@ -39,6 +42,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        // Obtain the shared Tracker instance.
+        AnalyticsTracker application = (AnalyticsTracker) getApplication();
+        mTracker = application.getDefaultTracker();
 
         // Prepare the Interstitial Ad
         interstitial = new InterstitialAd(MainActivity.this);
@@ -71,12 +78,26 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        Log.i(LOG_TAG, "Setting screen name: " + LOG_TAG);
+        mTracker.setScreenName("Screen name: " + LOG_TAG);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+    }
+
+    public void sendMetricsForAction(String actionMetric) {
+        mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory("MainActivity")
+                .setAction(actionMetric)
+                .build());
+    }
+
     public void displayInterstitial() {
         // If Ads are loaded, show Interstitial else show nothing.
         if (interstitial.isLoaded()) {
             interstitial.show();
         }
-
 
         if (findViewById(R.id.fragmentDetail) != null) {
             if (ismTwoPane()) {
@@ -92,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     Intent intent = new Intent(getBaseContext(), AddCardActivity.class);
                     startActivity(intent);
+                    sendMetricsForAction("AddCard");
                 }
             });
         } else {
@@ -121,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (id == R.id.action_add_card){
             Intent i = new Intent(getBaseContext(), AddCardActivity.class);
             startActivity(i);
+            sendMetricsForAction("AddCard");
         }
 
         return super.onOptionsItemSelected(item);
