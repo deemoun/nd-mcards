@@ -2,7 +2,6 @@ package com.app.deemounus.musiccards;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -10,14 +9,11 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
-import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
 public class MainActivity extends AppCompatActivity {
@@ -74,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
             public void onAdLoaded() {
                 // To show the full Ad window on start
 //                displayInterstitial();
+                Utils.sendMetricsForAction("AdLoaded", LOG_TAG, mTracker);
             }
         });
     }
@@ -81,16 +78,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume(){
         super.onResume();
-        Log.i(LOG_TAG, "Setting screen name: " + LOG_TAG);
-        mTracker.setScreenName("Screen name: " + LOG_TAG);
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-    }
-
-    public void sendMetricsForAction(String actionMetric) {
-        mTracker.send(new HitBuilders.EventBuilder()
-                .setCategory("MainActivity")
-                .setAction(actionMetric)
-                .build());
+        Utils.prepareMetricsForActivity(LOG_TAG, mTracker);
     }
 
     public void displayInterstitial() {
@@ -113,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     Intent intent = new Intent(getBaseContext(), AddCardActivity.class);
                     startActivity(intent);
-                    sendMetricsForAction("AddCard");
+                    Utils.sendMetricsForAction("AddCard", LOG_TAG, mTracker);
                 }
             });
         } else {
@@ -143,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (id == R.id.action_add_card){
             Intent i = new Intent(getBaseContext(), AddCardActivity.class);
             startActivity(i);
-            sendMetricsForAction("AddCard");
+            Utils.sendMetricsForAction("AddCard", LOG_TAG, mTracker);
         }
 
         return super.onOptionsItemSelected(item);

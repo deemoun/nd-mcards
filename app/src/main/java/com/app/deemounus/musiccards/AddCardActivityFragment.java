@@ -24,6 +24,8 @@ import android.widget.Button;
 import com.app.deemounus.musiccards.provider.musiccards.MusicCardsColumns;
 import com.app.deemounus.musiccards.provider.musiccards.MusicCardsContentValues;
 import com.app.deemounus.musiccards.provider.musiccards.MusicCardsSelection;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.gun0912.tedpicker.ImagePickerActivity;
 import com.nononsenseapps.filepicker.FilePickerActivity;
 
@@ -43,6 +45,7 @@ public class AddCardActivityFragment extends Fragment implements LoaderManager.L
     String musicUrl;
     String pictureUrl;
     boolean DBhasdata;
+    private Tracker mTracker;
 
     private static final int INTENT_REQUEST_GET_IMAGES = 13;
     private static final int FILE_CODE = 14;
@@ -50,11 +53,13 @@ public class AddCardActivityFragment extends Fragment implements LoaderManager.L
 
     private void getPictureUrlIntent() {
         Intent pictureIntent = new Intent(getActivity(), ImagePickerActivity.class);
+        Utils.sendMetricsForAction("getPictureIntentStarted", LOG_TAG, mTracker);
         startActivityForResult(pictureIntent, INTENT_REQUEST_GET_IMAGES);
     }
 
     private void getMusicUrlIntent() {
         Intent musicIntent = new Intent(getActivity(), FilePickerActivity.class);
+        Utils.sendMetricsForAction("getMusicIntentStarted", LOG_TAG, mTracker);
         musicIntent.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, true);
         musicIntent.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, false);
         musicIntent.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_FILE);
@@ -77,6 +82,7 @@ public class AddCardActivityFragment extends Fragment implements LoaderManager.L
     private void saveUrls() {
         if(musicUrl == null || pictureUrl == null){
             Utils.showToast(ctx, getString(R.string.add_card_error));
+            Utils.sendMetricsForAction("saveDatabaseDataFailure", LOG_TAG, mTracker);
             Log.v(LOG_TAG, "Either one of the values or both are empty!");
         } else  {
             try {
@@ -84,6 +90,7 @@ public class AddCardActivityFragment extends Fragment implements LoaderManager.L
             } catch (IOError e){
                 e.getLocalizedMessage();
             }
+            Utils.sendMetricsForAction("saveDatabaseDataSuccess", LOG_TAG, mTracker);
             getActivity().finish();
         }
     }
@@ -93,6 +100,15 @@ public class AddCardActivityFragment extends Fragment implements LoaderManager.L
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         ctx = getContext();
+        // Obtain the shared Tracker instance.
+        AnalyticsTracker application = (AnalyticsTracker) getActivity().getApplication();
+        mTracker = application.getDefaultTracker();
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        Utils.prepareMetricsForActivity(LOG_TAG, mTracker);
     }
 
     @Override
@@ -111,6 +127,7 @@ public class AddCardActivityFragment extends Fragment implements LoaderManager.L
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_save) {
          // Saving both image and music URLs and closing activity
+            Utils.sendMetricsForAction("saveDatabaseDataButtonPressed", LOG_TAG, mTracker);
             saveUrls();
         }
 
@@ -129,6 +146,7 @@ public class AddCardActivityFragment extends Fragment implements LoaderManager.L
             @Override
             public void onClick(View v) {
                 getPictureUrlIntent();
+                Utils.sendMetricsForAction("addPictureButtonPressed", LOG_TAG, mTracker);
             }
         });
 
@@ -138,6 +156,7 @@ public class AddCardActivityFragment extends Fragment implements LoaderManager.L
                 MusicCardsSelection where = new MusicCardsSelection();
 
                 getMusicUrlIntent();
+                Utils.sendMetricsForAction("addMusicButtonPressed", LOG_TAG, mTracker);
             }
         });
 

@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import com.google.android.gms.analytics.Tracker;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -27,11 +28,27 @@ public class DetailActivityFragment extends Fragment implements View.OnClickList
     String LOG_TAG = getClass().getSimpleName();
     Context ctx;
     private MediaPlayback mp;
+    private Tracker mTracker;
 
     public Intent getIntentValue(){
         return getActivity().getIntent();
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+        ctx = getContext();
+        // Obtain the shared Tracker instance.
+        AnalyticsTracker application = (AnalyticsTracker) getActivity().getApplication();
+        mTracker = application.getDefaultTracker();
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        Utils.prepareMetricsForActivity(LOG_TAG, mTracker);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,10 +80,12 @@ public class DetailActivityFragment extends Fragment implements View.OnClickList
         mp = new MediaPlayback(ctx, musicUrl);
         switch (v.getId()) {
             case R.id.playSong:
+                Utils.sendMetricsForAction("playSongButtonPressed", LOG_TAG, mTracker);
                 mp.playMedia();
                 break;
             case R.id.stopSong:
-                    mp.stopMedia();
+                Utils.sendMetricsForAction("stopSongButtonPressed", LOG_TAG, mTracker);
+                mp.stopMedia();
                 break;
         }
     }
