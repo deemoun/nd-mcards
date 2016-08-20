@@ -17,9 +17,11 @@ import java.util.List;
 
 public class MusicCardsAdapter extends RecyclerView.Adapter<MusicCardsAdapter.MusicCardsViewHolder> {
     static List<MusicCardsData> cardsData;
+    static boolean ismTwoPane;
 
-    public MusicCardsAdapter(List<MusicCardsData> cardsData) {
+    public MusicCardsAdapter(List<MusicCardsData> cardsData, boolean ismTwoPane) {
         this.cardsData = cardsData;
+        this.ismTwoPane = ismTwoPane;
     }
 
     @Override
@@ -66,8 +68,12 @@ public class MusicCardsAdapter extends RecyclerView.Adapter<MusicCardsAdapter.Mu
                     @Override
                     public void onClick(View v) {
                         Log.v("Adapter", "Item is clicked: " + getAdapterPosition());
-                        startDetailActivity(v.getContext(), imgURL, musicURL);
-                        Log.v("Music URL for Activity", musicURL);
+                        if(!ismTwoPane) {
+                            startDetailActivity(v.getContext(), imgURL, musicURL);
+                            Log.v("Music URL for Activity", musicURL);
+                        } else {
+                            // Add handler for Tablet UI
+                        }
                     }
                 });
             }

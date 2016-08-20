@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        ismTwoPane();
 
         // Obtain the shared Tracker instance.
         AnalyticsTracker application = (AnalyticsTracker) getApplication();

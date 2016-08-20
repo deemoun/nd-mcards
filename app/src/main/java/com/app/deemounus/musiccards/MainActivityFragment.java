@@ -1,5 +1,6 @@
 package com.app.deemounus.musiccards;
 
+import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -33,6 +34,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     private List<String> musicUrlList = new ArrayList<String>();
     private String[] cardsImgArray;
     private String[] cardsMusArray;
+    private boolean ismTwoPane;
     String LOG_TAG = getClass().getSimpleName();
     String FILE_APPEND = "file://";
     Context ctx;
@@ -56,6 +58,14 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        MainActivity mainActivity = (MainActivity) getActivity();
+        ismTwoPane = mainActivity.ismTwoPane();
+    }
+
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -98,7 +108,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
             llm.setOrientation(LinearLayoutManager.VERTICAL);
             recyclerView.setLayoutManager(llm);
             // Creating MusicCards inside RecyclerView
-            MusicCardsAdapter cardsAdapter = new MusicCardsAdapter(createCards());
+            MusicCardsAdapter cardsAdapter = new MusicCardsAdapter(createCards(), ismTwoPane);
             recyclerView.setAdapter(cardsAdapter);
         }
     }
