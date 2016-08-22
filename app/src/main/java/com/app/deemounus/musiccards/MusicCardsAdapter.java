@@ -2,6 +2,7 @@ package com.app.deemounus.musiccards;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -74,7 +75,14 @@ public class MusicCardsAdapter extends RecyclerView.Adapter<MusicCardsAdapter.Mu
                             Log.v("Music URL for Activity", musicURL);
                         } else {
                             // Add handler for Tablet UI
-                            Log.v(LOG_TAG, "Tablet layout");
+                            Bundle mBundle = new Bundle();
+                            mBundle.putString("imgUrl", imgURL);
+                            mBundle.putString("musicUrl", musicURL);
+                            DetailActivityFragment fragment = new DetailActivityFragment();
+                            fragment.setArguments(mBundle);
+                            ((MainActivity)v.getContext()).getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.fragmentDetail, fragment)
+                                    .commit();
                         }
                     }
                 });

@@ -29,6 +29,8 @@ public class DetailActivityFragment extends Fragment implements View.OnClickList
     Context ctx;
     private MediaPlayback mp;
     private Tracker mTracker;
+    private String imgURL;
+    private String musicURL;
 
     public Intent getIntentValue(){
         return getActivity().getIntent();
@@ -42,6 +44,15 @@ public class DetailActivityFragment extends Fragment implements View.OnClickList
         // Obtain the shared Tracker instance.
         AnalyticsTracker application = (AnalyticsTracker) getActivity().getApplication();
         mTracker = application.getDefaultTracker();
+        if(getResources().getBoolean(R.bool.isTablet)){
+            Bundle bundle = this.getArguments();
+            imgURL = bundle.getString("imgUrl");
+            musicURL = bundle.getString("musicUrl");
+        } else {
+            Intent intent = getIntentValue();
+            imgURL = intent.getStringExtra("imgUrl");
+            musicURL = intent.getStringExtra("musicUrl");
+        }
     }
 
     @Override
@@ -55,9 +66,7 @@ public class DetailActivityFragment extends Fragment implements View.OnClickList
                              Bundle savedInstanceState) {
         ctx = getContext();
         View v = inflater.inflate(R.layout.fragment_detail, container, false);
-        Intent intent = getIntentValue();
-        String imgUrl = intent.getStringExtra("imgUrl");
-        Log.v("Image URL is: ", imgUrl);
+//        Log.v("Image URL is: ", imgUrl);
         ImageButton play = (ImageButton) v.findViewById(R.id.playSong);
         play.setOnClickListener(this);
         ImageButton stop = (ImageButton) v.findViewById(R.id.stopSong);
@@ -65,7 +74,7 @@ public class DetailActivityFragment extends Fragment implements View.OnClickList
         stop.setOnClickListener(this);
 
         Picasso.with(ctx)
-                .load(imgUrl)
+                .load(imgURL)
                 .resize(400,400)
                 .centerCrop()
                 .into(image);
@@ -74,10 +83,8 @@ public class DetailActivityFragment extends Fragment implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        Intent intent = getIntentValue();
-        String musicUrl = intent.getStringExtra("musicUrl");
-        Log.v("Media URL is: ", musicUrl);
-        mp = new MediaPlayback(ctx, musicUrl);
+//        Log.v("Media URL is: ", musicUrl);
+        mp = new MediaPlayback(ctx, musicURL);
         switch (v.getId()) {
             case R.id.playSong:
                 Utils.sendMetricsForAction("playSongButtonPressed", LOG_TAG, mTracker);
