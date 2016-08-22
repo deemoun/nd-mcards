@@ -1,5 +1,7 @@
 package com.app.deemounus.musiccards;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -22,23 +24,19 @@ public class MainActivity extends AppCompatActivity {
     String LOG_TAG = getClass().getSimpleName();
     private Tracker mTracker;
 
-    public boolean ismTwoPane() {
-        if (findViewById(R.id.fragmentDetail) != null) {
-            Log.v(LOG_TAG, "Layout is two pane (tablet)");
-            return true;
-        } else {
-            Log.v(LOG_TAG, "Layout is single pain (phone)");
-            return false;
-        }
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        ismTwoPane();
+
+            if (findViewById(R.id.fragmentDetail) != null) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragmentDetail, new EmptyDetailViewFragment(), "TAG")
+                        .commit();
+                Log.v(LOG_TAG, "Adding empty fragment for tablet UI");
+            }
 
         // Obtain the shared Tracker instance.
         AnalyticsTracker application = (AnalyticsTracker) getApplication();
@@ -88,13 +86,6 @@ public class MainActivity extends AppCompatActivity {
             interstitial.show();
         }
 
-        if (findViewById(R.id.fragmentDetail) != null) {
-            if (ismTwoPane()) {
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragmentDetail, new EmptyDetailViewFragment(), "TAG")
-                        .commit();
-            }
-        }
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         if (fab != null) {
             fab.setOnClickListener(new View.OnClickListener() {

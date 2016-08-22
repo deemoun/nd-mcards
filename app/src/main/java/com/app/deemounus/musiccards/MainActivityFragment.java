@@ -57,13 +57,18 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(getResources().getBoolean(R.bool.isTablet)){
+            ismTwoPane = true;
+            Log.v("Is tablet layout?", Boolean.toString(ismTwoPane));
+        } else {
+            ismTwoPane = false;
+            Log.v("Is tablet layout?", Boolean.toString(ismTwoPane));
+        }
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        MainActivity mainActivity = (MainActivity) getActivity();
-        ismTwoPane = mainActivity.ismTwoPane();
     }
 
 
