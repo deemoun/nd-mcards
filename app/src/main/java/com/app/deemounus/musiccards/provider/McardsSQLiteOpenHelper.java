@@ -56,7 +56,7 @@ public class McardsSQLiteOpenHelper extends SQLiteOpenHelper {
         return new McardsSQLiteOpenHelper(context);
     }
 
-    private McardsSQLiteOpenHelper(Context context) {
+    public McardsSQLiteOpenHelper(Context context) {
         super(context, DATABASE_FILE_NAME, null, DATABASE_VERSION);
         mContext = context;
         mOpenHelperCallbacks = new McardsSQLiteOpenHelperCallbacks();

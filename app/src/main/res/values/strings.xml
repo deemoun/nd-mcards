@@ -12,7 +12,7 @@
     <string name="add_music">Add music</string>
     <string name="about_app">App was developed by Dmitry Yarygin"</string>
     <string name="add_card_error">Please choose both picture and music files!</string>
-    <string name="appwidget_text">EXAMPLE</string>
+    <string name="appwidget_text">WIDGET APP</string>
     <string name="add_widget">Add widget</string>
     <string name="blank_detail_fragment">Select a card from the left</string>
     <bool name="isTablet">false</bool>
