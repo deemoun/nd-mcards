@@ -30,6 +30,8 @@ public class WidgetDataFactory implements RemoteViewsService.RemoteViewsFactory 
     String[] cardsImgArray;
     String[] cardsMusArray;
     String LOG_TAG = getClass().getSimpleName();
+    int xImgSize = 200;
+    int yImgSize = 200;
     private Target mTarget;
 
     public WidgetDataFactory(Context context, Intent intent) {
@@ -101,7 +103,7 @@ public class WidgetDataFactory implements RemoteViewsService.RemoteViewsFactory 
             }
         });
 
-        return mBitmap = builder.build().with(mContext).load(url).resize(200,200).centerCrop().get();
+        return mBitmap = builder.build().with(mContext).load(url).resize(xImgSize,yImgSize).centerCrop().get();
     }
 
     @Override
