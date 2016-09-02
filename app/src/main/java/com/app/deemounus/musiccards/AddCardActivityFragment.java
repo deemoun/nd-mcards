@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -70,12 +71,12 @@ public class AddCardActivityFragment extends Fragment implements LoaderManager.L
     private void saveDBdata(String musicUrl, String pictureUrl){
         MusicCardsContentValues values = new MusicCardsContentValues();
         values.putMusic(musicUrl).putPicture(pictureUrl);
-        if(DBhasdata) {
-            Log.v(LOG_TAG, "Database has DATA, NOT NULL");
-            ctx.getContentResolver().update(MusicCardsColumns.CONTENT_URI, values.values(), null, null);
-        } else {
-            Log.v(LOG_TAG, "Database has NO DATA, it is NULL");
+        try {
             ctx.getContentResolver().insert(MusicCardsColumns.CONTENT_URI, values.values());
+        } catch (NullPointerException e){
+            e.printStackTrace();
+        } finally {
+            getActivity().finish();
         }
     }
 
@@ -87,11 +88,11 @@ public class AddCardActivityFragment extends Fragment implements LoaderManager.L
         } else  {
             try {
                 saveDBdata(musicUrl, pictureUrl);
+                Utils.setSharedPrefsBooleanValue("activityHasData", true, getContext());
             } catch (IOError e){
                 e.getLocalizedMessage();
             }
             Utils.sendMetricsForAction("saveDatabaseDataSuccess", LOG_TAG, mTracker);
-            getActivity().finish();
         }
     }
 

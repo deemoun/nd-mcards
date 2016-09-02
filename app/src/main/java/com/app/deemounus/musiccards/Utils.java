@@ -3,6 +3,8 @@ package com.app.deemounus.musiccards;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -27,5 +29,18 @@ public class Utils extends Application {
                 .setCategory(LOG_TAG)
                 .setAction(actionMetric)
                 .build());
+    }
+
+    public static void setSharedPrefsBooleanValue(String booleanName, Boolean value, Context ctx){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(ctx);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(booleanName, value);
+        editor.apply();
+    }
+
+    public static Boolean getSharedPrefsBooleanValue(String booleanName, Context ctx){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(ctx);
+        Boolean booleanValue = preferences.getBoolean(booleanName, false);
+        return booleanValue;
     }
 }

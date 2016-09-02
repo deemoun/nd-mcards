@@ -15,32 +15,6 @@ import com.squareup.picasso.Picasso;
 
 public class McardsAppWidget extends AppWidgetProvider {
 
-//    private void initData(Context context) {
-//        mMatchTime.clear();
-//
-//        Cursor mCursor;
-//
-//        McardsSQLiteOpenHelper mOpenHelper = new McardsSQLiteOpenHelper(context.getContentResolver());
-//
-//        SQLiteDatabase db = mOpenHelper.getReadableDatabase();
-//        String selectQuery = "SELECT * FROM " + DatabaseContract.SCORES_TABLE + " ORDER BY date DESC";
-//        mCursor = db.rawQuery(selectQuery, null);
-//
-//        if (mCursor.getCount() > 0) {
-//            mCursor.moveToFirst();
-//        } try {
-//            do {
-//                mMatchTime.add(mCursor.getString(mCursor.getColumnIndex(DatabaseContract.scores_table.TIME_COL)));
-//
-//            } while (mCursor.moveToNext());
-//        } catch (CursorIndexOutOfBoundsException e){
-//            Log.v("Football Scores Widget", "Problem loading football scores (connection issues?): " + e.getLocalizedMessage());
-//        } finally {
-//            if(!mCursor.isClosed())
-//                mCursor.close();
-//        }
-//    }
-
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
         // Construct the RemoteViews object

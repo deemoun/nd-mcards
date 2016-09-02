@@ -2,10 +2,12 @@ package com.app.deemounus.musiccards;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -18,8 +20,10 @@ import android.view.ViewGroup;
 
 import com.app.deemounus.musiccards.provider.musiccards.MusicCardsColumns;
 import com.app.deemounus.musiccards.provider.musiccards.MusicCardsSelection;
+import com.bumptech.glide.util.Util;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,22 +39,25 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     private String[] cardsImgArray;
     private String[] cardsMusArray;
     private boolean ismTwoPane;
+    private LayoutInflater mInflater;
+    private ViewGroup mContainer;
     String LOG_TAG = getClass().getSimpleName();
     String FILE_APPEND = "file://";
     Context ctx;
 
     private View populateFragmentData(LayoutInflater inflater, ViewGroup container){
-        //TODO: Add loader that checks if there is data
-        activityHasData = true;
+        activityHasData = Utils.getSharedPrefsBooleanValue("activityHasData", ctx);
+        mInflater = inflater;
+        mContainer = container;
 
         // Showing the layout depending if user has data for cards or not
 
         if(activityHasData){
             Log.v(LOG_TAG,"Activity has cards data");
-            return inflater.inflate(R.layout.fragment_main_data, container, false);
+            return mInflater.inflate(R.layout.fragment_main_data, mContainer, false);
         } else {
             Log.v(LOG_TAG,"Activity has no cards data");
-            return inflater.inflate(R.layout.fragment_main, container, false);
+            return mInflater.inflate(R.layout.fragment_main, mContainer, false);
         }
     }
 
@@ -66,16 +73,50 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         }
     }
 
+    private void detachFragment(){
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.detach(this).attach(this).commit();
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        //TODO: Fix bug that app is not fully clearing view after adding first card
+        if(mContainer != null) {
+            mContainer.removeAllViews();
+            mInflater = null;
+        }
+        Log.v(LOG_TAG, "onResume is called");
+        if(getLoaderManager().getLoader(1).isStarted()){
+            pictureUrlList.clear();
+            musicUrlList.clear();
+            cardsImgArray = null;
+            cardsMusArray = null;
+            Log.v(LOG_TAG, "Restarting loader");
+            getLoaderManager().restartLoader(1, null, this);
+            populateFragmentData(mInflater,mContainer);
+        } else {
+            Log.v(LOG_TAG, "No running loaders");
+        }
+
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        Log.v(LOG_TAG, "onStop is called");
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
     }
 
-
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Initiating the loader
+        Log.v(LOG_TAG, "onCreateView is called");
         getLoaderManager().initLoader(1, null, this);
         ctx = getContext();
         View v = populateFragmentData(inflater, container);
@@ -99,10 +140,10 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Uri CONTENT_URI = MusicCardsColumns.CONTENT_URI;
-        MusicCardsSelection where = new MusicCardsSelection();
-        where.orderById();
-        return new CursorLoader(getContext(), CONTENT_URI, null, where.sel(), where.args(), null);
+            Uri CONTENT_URI = MusicCardsColumns.CONTENT_URI;
+            MusicCardsSelection where = new MusicCardsSelection();
+            where.orderById();
+            return new CursorLoader(getContext(), CONTENT_URI, null, where.sel(), where.args(), null);
     }
 
     public void startLoadingCards(){

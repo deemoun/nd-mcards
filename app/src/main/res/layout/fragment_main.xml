@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="No cards added yet \n Press a button at the bottom to add one"
+        android:text="@string/no_cards_added"
         android:id="@+id/textView"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true" />
