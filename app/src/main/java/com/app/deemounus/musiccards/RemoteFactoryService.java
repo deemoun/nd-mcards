@@ -7,6 +7,6 @@ public class RemoteFactoryService extends RemoteViewsService {
 
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
-        return (new WidgetDataFactory(this.getApplicationContext(), intent));
+            return (new WidgetDataFactory(this.getApplicationContext(), intent));
     }
 }

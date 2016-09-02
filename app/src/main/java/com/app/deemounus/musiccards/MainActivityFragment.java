@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.app.deemounus.musiccards.provider.musiccards.MusicCardsColumns;
 import com.app.deemounus.musiccards.provider.musiccards.MusicCardsSelection;
@@ -83,8 +84,15 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         super.onResume();
         //TODO: Fix bug that app is not fully clearing view after adding first card
         if(mContainer != null) {
-            mContainer.removeAllViews();
-            mInflater = null;
+            try {
+                if (getView().findViewById(R.id.textViewNoData).isEnabled()) {
+                    mContainer.removeAllViews();
+                    TextView textView = (TextView) getView().findViewById(R.id.textViewNoData);
+                    textView.setText("");
+                }
+            } catch (NullPointerException e){
+                e.printStackTrace();
+            }
         }
         Log.v(LOG_TAG, "onResume is called");
         if(getLoaderManager().getLoader(1).isStarted()){

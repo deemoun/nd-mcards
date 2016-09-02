@@ -41,12 +41,20 @@ public class WidgetDataFactory implements RemoteViewsService.RemoteViewsFactory 
 
     @Override
     public void onCreate() {
-        initData();
+        try {
+            initData();
+        } catch (ArrayIndexOutOfBoundsException e){
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void onDataSetChanged() {
-        initData();
+        try {
+            initData();
+        } catch (ArrayIndexOutOfBoundsException e){
+            e.printStackTrace();
+        }
     }
 
     private void initData() {

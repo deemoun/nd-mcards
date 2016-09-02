@@ -9,31 +9,33 @@
     tools:context="com.app.deemounus.musiccards.DetailActivityFragment"
     tools:showIn="@layout/activity_detail">
 
+    <ImageView
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+        android:contentDescription="@string/displayed_image"
+        android:id="@+id/imageView"
+        android:layout_alignParentStart="true" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom|center_horizontal">
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/play_song"
-        android:src="@drawable/ic_play_circle_filled_black_48dp"
+        android:src="@drawable/play_button"
         android:id="@+id/playSong"
-        android:layout_marginBottom="74dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="87dp" />
+        android:background="@android:color/transparent"
+        android:theme="@style/AppButtons" />
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/stop_song"
-        android:src="@drawable/ic_stop_black_48dp"
-        android:id="@+id/stopSong"
-        android:layout_below="@+id/imageView"
-        android:layout_toEndOf="@+id/playSong" />
-
-    <ImageView
-        android:layout_width="400dp"
-        android:layout_height="400dp"
-        android:id="@+id/imageView"
-        android:layout_above="@+id/playSong"
-        android:layout_alignParentStart="true" />
+        android:theme="@style/AppButtons"
+        android:src="@drawable/stop_button"
+        android:background="@android:color/transparent"
+        android:id="@+id/stopSong" />
+    </LinearLayout>
 </RelativeLayout>
