@@ -4,6 +4,15 @@ android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
 
+    signingConfigs {
+        config {
+            keyAlias 'Key'
+            keyPassword 'testonetwopassword'
+            storeFile file('/Users/deemounus/Desktop/keystore/keystore.jks')
+            storePassword 'mcards'
+        }
+    }
+
     defaultConfig {
         applicationId "com.app.deemounus.musiccards"
         minSdkVersion 18
@@ -15,6 +24,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
     }
 }
