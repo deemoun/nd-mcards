@@ -85,22 +85,13 @@ public class MainActivity extends AppCompatActivity {
         if (interstitial.isLoaded()) {
             interstitial.show();
         }
+    }
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        if (fab != null) {
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+    public void fabPressed(View view) {
                     Intent intent = new Intent(getBaseContext(), AddCardActivity.class);
                     startActivity(intent);
                     Utils.sendMetricsForAction("AddCard", LOG_TAG, mTracker);
                 }
-            });
-        } else {
-            Log.v(LOG_TAG, "FAB object is null");
-        }
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

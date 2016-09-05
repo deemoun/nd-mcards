@@ -13,7 +13,7 @@
     <string name="about_app">App was developed by Dmitry Yarygin"</string>
     <string name="add_card_error">Please choose both picture and music files!</string>
     <string name="appwidget_text">WIDGET APP</string>
-    <string name="no_cards_added">No cards added yet \n Press a button at the bottom to add one</string>
+    <string name="no_cards_added">No cards added yet \n Press menu button and select "Add card"</string>
     <string name="add_widget">Add widget</string>
     <string name="blank_detail_fragment">Select a card from the left</string>
     <string name="displayed_image">Displayed image</string>
