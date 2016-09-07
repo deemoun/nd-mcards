@@ -7,8 +7,8 @@ android {
     signingConfigs {
         config {
             keyAlias 'Key'
-            keyPassword 'testonetwopassword'
-            storeFile file('/Users/deemounus/Desktop/keystore/keystore.jks')
+            keyPassword 'store_password'
+            storeFile file('../keystore.jks')
             storePassword 'mcards'
         }
     }
