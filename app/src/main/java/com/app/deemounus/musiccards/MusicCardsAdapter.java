@@ -75,14 +75,14 @@ public class MusicCardsAdapter extends RecyclerView.Adapter<MusicCardsAdapter.Mu
                             Log.v("Music URL for Activity", musicURL);
                         } else {
                             // Add handler for Tablet UI
-                            Bundle mBundle = new Bundle();
-                            mBundle.putString("imgUrl", imgURL);
-                            mBundle.putString("musicUrl", musicURL);
-                            DetailActivityFragment fragment = new DetailActivityFragment();
-                            fragment.setArguments(mBundle);
-                            ((MainActivity)v.getContext()).getSupportFragmentManager().beginTransaction()
-                                    .replace(R.id.fragmentDetail, fragment)
-                                    .commit();
+//                            Bundle mBundle = new Bundle();
+//                            mBundle.putString("imgUrl", imgURL);
+//                            mBundle.putString("musicUrl", musicURL);
+//                            DetailActivityFragment fragment = new DetailActivityFragment();
+//                            fragment.setArguments(mBundle);
+//                            ((MainActivity)v.getContext()).getSupportFragmentManager().beginTransaction()
+//                                    .replace(R.id.fragmentDetail, fragment)
+//                                    .commit();
                         }
                     }
                 });

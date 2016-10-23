@@ -31,12 +31,13 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-            if (getResources().getBoolean(R.bool.isTablet)) {
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragmentDetail, new EmptyDetailViewFragment(), "TAG")
-                        .commit();
-                Log.v(LOG_TAG, "Adding empty fragment for tablet UI");
-            }
+//      Uncomment to enable tablet layout back
+//            if (getResources().getBoolean(R.bool.isTablet)) {
+//                getSupportFragmentManager().beginTransaction()
+//                        .replace(R.id.fragmentDetail, new EmptyDetailViewFragment(), "TAG")
+//                        .commit();
+//                Log.v(LOG_TAG, "Adding empty fragment for tablet UI");
+//            }
 
 
         // Obtain the shared Tracker instance.
