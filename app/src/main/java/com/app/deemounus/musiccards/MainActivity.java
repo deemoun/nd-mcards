@@ -31,47 +31,52 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-            if (findViewById(R.id.fragmentDetail) != null) {
+            if (getResources().getBoolean(R.bool.isTablet)) {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragmentDetail, new EmptyDetailViewFragment(), "TAG")
                         .commit();
                 Log.v(LOG_TAG, "Adding empty fragment for tablet UI");
             }
 
+
         // Obtain the shared Tracker instance.
         AnalyticsTracker application = (AnalyticsTracker) getApplication();
         mTracker = application.getDefaultTracker();
 
-        // Prepare the Interstitial Ad
-        interstitial = new InterstitialAd(MainActivity.this);
-        // Insert the Ad Unit ID
-        interstitial.setAdUnitId(getString(R.string.interstitial_ad_unit_id));
+//        Uncomment those lines to get Ad functionality
+//
+//            // Prepare the Interstitial Ad
+//        interstitial = new InterstitialAd(MainActivity.this);
+//        // Insert the Ad Unit ID
+//        interstitial.setAdUnitId(getString(R.string.interstitial_ad_unit_id));
+//
+//        //Locate the Banner Ad in activity_main.xml
+//        AdView adView = (AdView) this.findViewById(R.id.adView);
+//
+//        // Request for Ads
+//        AdRequest adRequest = new AdRequest.Builder()
+//
+//                // Add a test device to show Test Ads
+//                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+//                .addTestDevice(getString(R.string.ads_test_id))
+//                .build();
+//
+//        // Load ads into Banner Ads
+//        adView.loadAd(adRequest);
+//
+//        // Load ads into Interstitial Ads
+//        interstitial.loadAd(adRequest);
+//
+//
+//            // Prepare an Interstitial Ad Listener
+//        interstitial.setAdListener(new AdListener() {
+//            public void onAdLoaded() {
+//                // To show the full Ad window on start
+////                displayInterstitial();
+//                Utils.sendMetricsForAction("AdLoaded", LOG_TAG, mTracker);
+//            }
+//        });
 
-        //Locate the Banner Ad in activity_main.xml
-        AdView adView = (AdView) this.findViewById(R.id.adView);
-
-        // Request for Ads
-        AdRequest adRequest = new AdRequest.Builder()
-
-                // Add a test device to show Test Ads
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                .addTestDevice(getString(R.string.ads_test_id))
-                .build();
-
-        // Load ads into Banner Ads
-        adView.loadAd(adRequest);
-
-        // Load ads into Interstitial Ads
-        interstitial.loadAd(adRequest);
-
-        // Prepare an Interstitial Ad Listener
-        interstitial.setAdListener(new AdListener() {
-            public void onAdLoaded() {
-                // To show the full Ad window on start
-//                displayInterstitial();
-                Utils.sendMetricsForAction("AdLoaded", LOG_TAG, mTracker);
-            }
-        });
     }
 
     @Override
