@@ -1,5 +1,7 @@
 package com.app.deemounus.musiccards;
 
+import android.*;
+import android.Manifest;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.Context;
@@ -21,17 +23,23 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.app.deemounus.musiccards.provider.musiccards.MusicCardsColumns;
 import com.app.deemounus.musiccards.provider.musiccards.MusicCardsContentValues;
 import com.app.deemounus.musiccards.provider.musiccards.MusicCardsSelection;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
 import com.gun0912.tedpicker.ImagePickerActivity;
 import com.nononsenseapps.filepicker.FilePickerActivity;
 
 import java.io.IOError;
 import java.util.ArrayList;
+
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import static android.Manifest.permission_group.CAMERA;
 
 public class AddCardActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -53,9 +61,26 @@ public class AddCardActivityFragment extends Fragment implements LoaderManager.L
 
 
     private void getPictureUrlIntent() {
-        Intent pictureIntent = new Intent(getActivity(), ImagePickerActivity.class);
-        Utils.sendMetricsForAction("getPictureIntentStarted", LOG_TAG, mTracker);
-        startActivityForResult(pictureIntent, INTENT_REQUEST_GET_IMAGES);
+        PermissionListener permissionlistener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+                //Toast.makeText(getActivity(), "Permission Granted", Toast.LENGTH_SHORT).show();
+                Utils.sendMetricsForAction("getPictureIntentStarted", LOG_TAG, mTracker);
+                Intent pictureIntent = new Intent(getActivity(), ImagePickerActivity.class);
+                startActivityForResult(pictureIntent, INTENT_REQUEST_GET_IMAGES);
+            }
+
+            @Override
+            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+//                Toast.makeText(getActivity(), "Please allow access for:\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        new TedPermission(getContext())
+                .setPermissionListener(permissionlistener)
+                .setDeniedMessage("If you reject permissions, you will not be able to add cards\n\nPlease turn on permissions at [Setting] > [Permission]")
+                .setPermissions(WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
+                .check();
     }
 
     private void getMusicUrlIntent() {
@@ -76,6 +101,8 @@ public class AddCardActivityFragment extends Fragment implements LoaderManager.L
         } catch (NullPointerException e){
             e.printStackTrace();
         } finally {
+            Intent returnIntent = new Intent();
+            getActivity().setResult(Activity.RESULT_OK, returnIntent);
             getActivity().finish();
         }
     }

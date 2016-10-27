@@ -1,16 +1,19 @@
 package com.app.deemounus.musiccards;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -22,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     private InterstitialAd interstitial;
     String LOG_TAG = getClass().getSimpleName();
+    int REQUEST_CODE = 1;
     private Tracker mTracker;
 
     @Override
@@ -95,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void fabPressed(View view) {
                     Intent intent = new Intent(getBaseContext(), AddCardActivity.class);
-                    startActivity(intent);
+                    startActivityForResult(intent, REQUEST_CODE);
                     Utils.sendMetricsForAction("AddCard", LOG_TAG, mTracker);
                 }
 
@@ -107,6 +111,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 1) {
+            if(resultCode == Activity.RESULT_OK){
+                Log.v(LOG_TAG, "This should update fragment's TextView");
+                FragmentManager manager = getSupportFragmentManager();
+                MainActivityFragment fragment = (MainActivityFragment) manager.findFragmentById(R.id.mainactivity_fragment);
+                fragment.updateTextView("");
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                Log.v(LOG_TAG, "No cards were added");
+            }
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -115,11 +135,11 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_about){
-            Intent i = new Intent(getBaseContext(), AboutApp.class);
-            startActivity(i);
+            Intent intent = new Intent(getBaseContext(), AddCardActivity.class);
+            startActivityForResult(intent, REQUEST_CODE);
         } else if (id == R.id.action_add_card){
-            Intent i = new Intent(getBaseContext(), AddCardActivity.class);
-            startActivity(i);
+            Intent intent = new Intent(getBaseContext(), AddCardActivity.class);
+            startActivityForResult(intent, REQUEST_CODE);
             Utils.sendMetricsForAction("AddCard", LOG_TAG, mTracker);
         }
 

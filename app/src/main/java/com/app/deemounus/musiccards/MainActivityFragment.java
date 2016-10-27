@@ -29,6 +29,8 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.google.android.gms.analytics.internal.zzy.e;
+
 public class MainActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public MainActivityFragment() {
@@ -42,6 +44,8 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     private boolean ismTwoPane;
     private LayoutInflater mInflater;
     private ViewGroup mContainer;
+    private TextView noDataTextView;
+
     String LOG_TAG = getClass().getSimpleName();
     String FILE_APPEND = "file://";
     Context ctx;
@@ -53,13 +57,23 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
         // Showing the layout depending if user has data for cards or not
 
-        if(activityHasData){
-            Log.v(LOG_TAG,"Activity has cards data");
-            return mInflater.inflate(R.layout.fragment_main_data, mContainer, false);
+        if(Utils.getSharedPrefsBooleanValue("activityHasData", ctx)){
+            Log.v(LOG_TAG, "Activity has cards data");
+            View view = inflater.inflate(R.layout.fragment_main_data, mContainer, false);
+            noDataTextView = (TextView) view.findViewById(R.id.textViewNoData);
+            return view;
         } else {
             Log.v(LOG_TAG,"Activity has no cards data");
-            return mInflater.inflate(R.layout.fragment_main, mContainer, false);
+            View view = inflater.inflate(R.layout.fragment_main_data, mContainer, false);
+            noDataTextView = (TextView) view.findViewById(R.id.textViewNoData);
+            noDataTextView.setText(getString(R.string.no_cards_added));
+            return view;
         }
+    }
+
+    public void updateTextView(String text){
+        Log.v(LOG_TAG, "updateTextView is called");
+        noDataTextView.setText(text);
     }
 
     @Override
@@ -82,18 +96,6 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onResume(){
         super.onResume();
-        //TODO: Fix bug that app is not fully clearing view after adding first card
-        if(mContainer != null) {
-            try {
-                if (getView().findViewById(R.id.textViewNoData).isEnabled()) {
-                    mContainer.removeAllViews();
-                    TextView textView = (TextView) getView().findViewById(R.id.textViewNoData);
-                    textView.setText("");
-                }
-            } catch (NullPointerException e){
-                e.printStackTrace();
-            }
-        }
         Log.v(LOG_TAG, "onResume is called");
         if(getLoaderManager().getLoader(1).isStarted()){
             pictureUrlList.clear();
@@ -106,7 +108,6 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         } else {
             Log.v(LOG_TAG, "No running loaders");
         }
-
     }
 
     @Override
@@ -118,6 +119,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        Log.v(LOG_TAG, "onAttach is called");
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
