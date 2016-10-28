@@ -111,7 +111,6 @@ public class AddCardActivityFragment extends Fragment implements LoaderManager.L
         if(musicUrl == null || pictureUrl == null){
             Utils.showToast(ctx, getString(R.string.add_card_error));
             Utils.sendMetricsForAction("saveDatabaseDataFailure", LOG_TAG, mTracker);
-            Log.v(LOG_TAG, "Either one of the values or both are empty!");
         } else  {
             try {
                 saveDBdata(musicUrl, pictureUrl);
@@ -201,7 +200,6 @@ public class AddCardActivityFragment extends Fragment implements LoaderManager.L
 
             ArrayList<Uri> image_uris = intent.getParcelableArrayListExtra(ImagePickerActivity.EXTRA_IMAGE_URIS);
 
-            Log.v("Image URL: ", image_uris.toString());
             pictureUrl = image_uris.toString();
         }
 
@@ -212,7 +210,6 @@ public class AddCardActivityFragment extends Fragment implements LoaderManager.L
                         if(clip.getItemCount() >= 0) {
                             Uri uri = clip.getItemAt(0).getUri();
                             // Do something with the URI
-                            Log.v("Music URL: ", uri.toString());
                             musicUrl = uri.toString();
                         } else {
                             Log.v(LOG_TAG, "Url is null");
@@ -231,10 +228,8 @@ public class AddCardActivityFragment extends Fragment implements LoaderManager.L
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         if(cursor.getCount() == 0){
             DBhasdata = false;
-            Log.v(LOG_TAG, "Setting database value to FALSE");
         } else if (cursor.getCount() > 0) {
             DBhasdata = true;
-            Log.v(LOG_TAG, "Setting database value to TRUE");
         }
         cursor.close();
     }

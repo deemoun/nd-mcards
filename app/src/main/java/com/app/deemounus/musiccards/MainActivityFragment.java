@@ -61,7 +61,6 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     }
 
     public void updateTextView(String text){
-        Log.v(LOG_TAG, "updateTextView is called");
         noDataTextView = (TextView) getView().findViewById(R.id.textViewNoData);
         noDataTextView.setText(text);
     }
@@ -86,7 +85,6 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onResume(){
         super.onResume();
-        Log.v(LOG_TAG, "onResume is called");
         if(getLoaderManager().getLoader(1).isStarted()){
             pictureUrlList.clear();
             musicUrlList.clear();
@@ -108,7 +106,6 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onStop(){
         super.onStop();
-        Log.v(LOG_TAG, "onStop is called");
     }
 
     @Override
@@ -120,14 +117,12 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        Log.v(LOG_TAG, "onAttach is called");
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Initiating the loader
-        Log.v(LOG_TAG, "onCreateView is called");
         getLoaderManager().initLoader(1, null, this);
         ctx = getContext();
         View v = populateFragmentData(inflater, container);
