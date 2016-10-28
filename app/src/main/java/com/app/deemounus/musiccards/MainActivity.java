@@ -25,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
 
     private InterstitialAd interstitial;
     String LOG_TAG = getClass().getSimpleName();
-    int REQUEST_CODE = 1;
     private Tracker mTracker;
 
     @Override
@@ -99,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void fabPressed(View view) {
                     Intent intent = new Intent(getBaseContext(), AddCardActivity.class);
-                    startActivityForResult(intent, REQUEST_CODE);
+                    startActivity(intent);
                     Utils.sendMetricsForAction("AddCard", LOG_TAG, mTracker);
                 }
 
@@ -111,22 +110,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        if (requestCode == 1) {
-            if(resultCode == Activity.RESULT_OK){
-                Log.v(LOG_TAG, "This should update fragment's TextView");
-                FragmentManager manager = getSupportFragmentManager();
-                MainActivityFragment fragment = (MainActivityFragment) manager.findFragmentById(R.id.mainactivity_fragment);
-                fragment.updateTextView("");
-            }
-            if (resultCode == Activity.RESULT_CANCELED) {
-                Log.v(LOG_TAG, "No cards were added");
-            }
-        }
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -135,11 +118,11 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_about){
-            Intent intent = new Intent(getBaseContext(), AddCardActivity.class);
-            startActivityForResult(intent, REQUEST_CODE);
+            Intent intent = new Intent(getBaseContext(), AboutApp.class);
+            startActivity(intent);
         } else if (id == R.id.action_add_card){
             Intent intent = new Intent(getBaseContext(), AddCardActivity.class);
-            startActivityForResult(intent, REQUEST_CODE);
+            startActivity(intent);
             Utils.sendMetricsForAction("AddCard", LOG_TAG, mTracker);
         }
 

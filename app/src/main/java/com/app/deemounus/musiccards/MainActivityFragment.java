@@ -28,6 +28,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static com.google.android.gms.analytics.internal.zzy.e;
 
@@ -55,24 +56,13 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         mInflater = inflater;
         mContainer = container;
 
-        // Showing the layout depending if user has data for cards or not
-
-        if(Utils.getSharedPrefsBooleanValue("activityHasData", ctx)){
-            Log.v(LOG_TAG, "Activity has cards data");
-            View view = inflater.inflate(R.layout.fragment_main_data, mContainer, false);
-            noDataTextView = (TextView) view.findViewById(R.id.textViewNoData);
-            return view;
-        } else {
-            Log.v(LOG_TAG,"Activity has no cards data");
-            View view = inflater.inflate(R.layout.fragment_main_data, mContainer, false);
-            noDataTextView = (TextView) view.findViewById(R.id.textViewNoData);
-            noDataTextView.setText(getString(R.string.no_cards_added));
-            return view;
-        }
+        View view = inflater.inflate(R.layout.fragment_main_data, mContainer, false);
+        return view;
     }
 
     public void updateTextView(String text){
         Log.v(LOG_TAG, "updateTextView is called");
+        noDataTextView = (TextView) getView().findViewById(R.id.textViewNoData);
         noDataTextView.setText(text);
     }
 
@@ -105,6 +95,11 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
             Log.v(LOG_TAG, "Restarting loader");
             getLoaderManager().restartLoader(1, null, this);
             populateFragmentData(mInflater,mContainer);
+            if(Utils.getSharedPrefsBooleanValue("activityHasData", ctx)) {
+                updateTextView("");
+            } else {
+                updateTextView(getString(R.string.no_cards_added));
+            }
         } else {
             Log.v(LOG_TAG, "No running loaders");
         }
@@ -114,6 +109,12 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     public void onStop(){
         super.onStop();
         Log.v(LOG_TAG, "onStop is called");
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+
     }
 
     @Override

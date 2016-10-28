@@ -41,6 +41,7 @@ public class Utils extends Application {
     public static Boolean getSharedPrefsBooleanValue(String booleanName, Context ctx){
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(ctx);
         Boolean booleanValue = preferences.getBoolean(booleanName, false);
+        Log.v("Utils", "Preference value" + booleanValue);
         return booleanValue;
     }
 }
