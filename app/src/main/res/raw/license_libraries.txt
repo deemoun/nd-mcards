@@ -1,0 +1,6 @@
+Libraries used in MusicCards application:
+
+Picasso
+TedPicker
+TedPermission
+FilePicker

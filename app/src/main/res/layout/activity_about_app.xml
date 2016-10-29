@@ -12,7 +12,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textStyle="normal"
+        android:textStyle="bold"
         android:textColor="@color/primary_text"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:contentDescription="@string/about_app"
@@ -21,4 +21,27 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true" />
+
+    <Button
+        android:text="@string/show_license"
+        android:layout_width="200dp"
+        android:theme="@style/AppButtons"
+        android:textColor="@color/primary_text"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView2"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="13dp"
+        android:onClick="showLicensePressed"
+        android:id="@+id/showLicense" />
+    <Button
+        android:text="@string/library_usage"
+        android:layout_width="200dp"
+        android:theme="@style/AppButtons"
+        android:textColor="@color/primary_text"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/showLicense"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="13dp"
+        android:onClick="showLibrariesPressed"
+        android:id="@+id/showLicenseLibraries" />
 </RelativeLayout>

@@ -3,8 +3,10 @@ package com.app.deemounus.musiccards;
 import android.*;
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -86,6 +88,7 @@ public class AddCardActivityFragment extends Fragment implements LoaderManager.L
     private void getMusicUrlIntent() {
         Intent musicIntent = new Intent(getActivity(), FilePickerActivity.class);
         Utils.sendMetricsForAction("getMusicIntentStarted", LOG_TAG, mTracker);
+        // TODO: Fix the bug that user is able to select multiple pictures
         musicIntent.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, true);
         musicIntent.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, false);
         musicIntent.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_FILE);
@@ -108,7 +111,7 @@ public class AddCardActivityFragment extends Fragment implements LoaderManager.L
     }
 
     private void saveUrls() {
-        if(musicUrl == null || pictureUrl == null){
+        if(musicUrl == null || pictureUrl == null || pictureUrl.equals("[]") || musicUrl.contains(", ") || pictureUrl.contains(", ") || musicUrl.contains(".jpg") || musicUrl.contains(".png") || musicUrl.contains(".tif") || musicUrl.contains(".gif")){
             Utils.showToast(ctx, getString(R.string.add_card_error));
             Utils.sendMetricsForAction("saveDatabaseDataFailure", LOG_TAG, mTracker);
         } else  {
@@ -121,6 +124,8 @@ public class AddCardActivityFragment extends Fragment implements LoaderManager.L
             Utils.sendMetricsForAction("saveDatabaseDataSuccess", LOG_TAG, mTracker);
         }
     }
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -201,9 +206,10 @@ public class AddCardActivityFragment extends Fragment implements LoaderManager.L
             ArrayList<Uri> image_uris = intent.getParcelableArrayListExtra(ImagePickerActivity.EXTRA_IMAGE_URIS);
 
             pictureUrl = image_uris.toString();
+            Log.v(LOG_TAG + "PIC PATH: ", pictureUrl);
+
         }
 
-        // TODO: Fix the bug that user is able to select multiple pictures
         if (requestCode == FILE_CODE && resultCode == Activity.RESULT_OK) {
             if (intent.getBooleanExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false)) {
                     ClipData clip = intent.getClipData();
