@@ -206,7 +206,7 @@ public class AddCardActivityFragment extends Fragment implements LoaderManager.L
             ArrayList<Uri> image_uris = intent.getParcelableArrayListExtra(ImagePickerActivity.EXTRA_IMAGE_URIS);
 
             pictureUrl = image_uris.toString();
-            Log.v(LOG_TAG + "PIC PATH: ", pictureUrl);
+//            Log.v(LOG_TAG + "PIC PATH: ", pictureUrl);
 
         }
 
@@ -218,7 +218,7 @@ public class AddCardActivityFragment extends Fragment implements LoaderManager.L
                             // Do something with the URI
                             musicUrl = uri.toString();
                         } else {
-                            Log.v(LOG_TAG, "Url is null");
+//                            Log.v(LOG_TAG, "Url is null");
                         }
                 }
             }

@@ -69,10 +69,10 @@ public class MusicCardsAdapter extends RecyclerView.Adapter<MusicCardsAdapter.Mu
                 v.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.v(LOG_TAG, "Item is clicked: " + getAdapterPosition());
+//                        Log.v(LOG_TAG, "Item is clicked: " + getAdapterPosition());
                         if(!ismTwoPane) {
                             startDetailActivity(v.getContext(), imgURL, musicURL);
-                            Log.v("Music URL for Activity", musicURL);
+//                            Log.v("Music URL for Activity", musicURL);
                         }
 //                        else {
                             // Add handler for Tablet UI
