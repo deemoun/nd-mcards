@@ -15,15 +15,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 //import android.widget.TextView;
 //
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.InterstitialAd;
+//import com.google.android.gms.ads.AdListener;
+//import com.google.android.gms.ads.AdRequest;
+//import com.google.android.gms.ads.AdView;
+//import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.analytics.Tracker;
 
 public class MainActivity extends AppCompatActivity {
 
-    private InterstitialAd interstitial;
+//    private InterstitialAd interstitial;
     String LOG_TAG = getClass().getSimpleName();
     private Tracker mTracker;
 
@@ -89,12 +89,12 @@ public class MainActivity extends AppCompatActivity {
         Utils.prepareMetricsForActivity(LOG_TAG, mTracker);
     }
 
-    public void displayInterstitial() {
-        // If Ads are loaded, show Interstitial else show nothing.
-        if (interstitial.isLoaded()) {
-            interstitial.show();
-        }
-    }
+//    public void displayInterstitial() {
+//        // If Ads are loaded, show Interstitial else show nothing.
+//        if (interstitial.isLoaded()) {
+//            interstitial.show();
+//        }
+//    }
 
     public void fabPressed(View view) {
                     Intent intent = new Intent(getBaseContext(), AddCardActivity.class);
