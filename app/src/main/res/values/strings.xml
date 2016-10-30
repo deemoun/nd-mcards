@@ -10,7 +10,7 @@
     <string name="stop_song">Stop song</string>
     <string name="add_picture">Add picture</string>
     <string name="add_music">Add music</string>
-    <string name="about_app">MusicCards \n© Dmitry Yarygin"</string>
+    <string name="about_app">MusicCards \n© Dmitry Yarygin, 2016"</string>
     <string name="add_card_error">Please choose both picture and music files!\nOne of each should be selected</string>
     <string name="appwidget_text">WIDGET APP</string>
     <string name="no_cards_added">No cards added yet \n Press "Add" button in lower right corner</string>
@@ -24,5 +24,4 @@
     <string name="license_header">MusicCards</string>
     <string name="show_license">Application License Information</string>
     <string name="library_usage">Other licenses</string>
-    <string name="app_verion">1.0</string>
 </resources>

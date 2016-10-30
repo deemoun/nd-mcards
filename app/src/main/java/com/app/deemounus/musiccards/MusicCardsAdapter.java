@@ -73,7 +73,8 @@ public class MusicCardsAdapter extends RecyclerView.Adapter<MusicCardsAdapter.Mu
                         if(!ismTwoPane) {
                             startDetailActivity(v.getContext(), imgURL, musicURL);
                             Log.v("Music URL for Activity", musicURL);
-                        } else {
+                        }
+//                        else {
                             // Add handler for Tablet UI
 //                            Bundle mBundle = new Bundle();
 //                            mBundle.putString("imgUrl", imgURL);
@@ -83,7 +84,7 @@ public class MusicCardsAdapter extends RecyclerView.Adapter<MusicCardsAdapter.Mu
 //                            ((MainActivity)v.getContext()).getSupportFragmentManager().beginTransaction()
 //                                    .replace(R.id.fragmentDetail, fragment)
 //                                    .commit();
-                        }
+//                        }
                     }
                 });
             }
@@ -94,11 +95,12 @@ public class MusicCardsAdapter extends RecyclerView.Adapter<MusicCardsAdapter.Mu
                 MusicCardsData cd = cardsData.get(i);
                 imgURL = cd.cardPicture;
                 musicURL = cd.cardMusic;
-                Log.v("Image from Adapter", imgURL);
-                Log.v("Music from Adapter", musicURL);
+//                Log.v("Image from Adapter", imgURL);
+//                Log.v("Music from Adapter", musicURL);
                 Picasso.with(context)
                         .load(imgURL)
                         .resize(400,400)
+                        .error(R.drawable.image_placeholder)
                         .centerCrop()
                         .into(vCardPic);
             }

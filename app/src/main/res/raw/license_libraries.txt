@@ -1,4 +1,4 @@
-Libraries used in MusicCards application:
+Software libraries used in MusicCards application:
 
 Picasso
 TedPicker

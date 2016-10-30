@@ -76,6 +76,7 @@ public class DetailActivityFragment extends Fragment implements View.OnClickList
         Picasso.with(ctx)
                 .load(imgURL)
                 .resize(400,400)
+                .error(R.drawable.image_placeholder)
                 .centerCrop()
                 .into(image);
         return v;
